@@ -25,7 +25,11 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.sunjaelee.recipe"
+    },
+    "android": {
+      "package": "com.sunjaelee.recipe"
     }
   }
 }

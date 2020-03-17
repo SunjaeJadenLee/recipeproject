@@ -7,10 +7,15 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
 import BottomTabNavigator from './navigation/BottomTabNavigator';
+import LoginScreen from './screens/LoginScreen'
+import HomeScreen from './screens/HomeScreen'
+
 import useLinking from './navigation/useLinking';
 
-const Stack = createStackNavigator();
+console.disableYellowBox = true;
 
+const rootStack = createStackNavigator();
+const HomeStack = createStackNavigator()
 export default function App(props) {
   const [isLoadingComplete, setLoadingComplete] = React.useState(false);
   const [initialNavigationState, setInitialNavigationState] = React.useState();
@@ -43,6 +48,14 @@ export default function App(props) {
     loadResourcesAndDataAsync();
   }, []);
 
+  const HomeStackScreen = props =>{
+    return (
+      <HomeStack.Navigator screenOptions={{headerShown:false}}>
+        <HomeStack.Screen name="home" component={HomeScreen} />
+      </HomeStack.Navigator>
+    )
+  }
+
   if (!isLoadingComplete && !props.skipLoadingScreen) {
     return null;
   } else {
@@ -50,9 +63,10 @@ export default function App(props) {
       <View style={styles.container}>
         {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
         <NavigationContainer ref={containerRef} initialState={initialNavigationState}>
-          <Stack.Navigator>
-            <Stack.Screen name="Root" component={BottomTabNavigator} />
-          </Stack.Navigator>
+          <rootStack.Navigator screenOptions={{headerShown:false}}>
+              <rootStack.Screen name="login" component={LoginScreen}/>
+              <rootStack.Screen name="home" component={HomeStackScreen} />
+          </rootStack.Navigator> 
         </NavigationContainer>
       </View>
     );
