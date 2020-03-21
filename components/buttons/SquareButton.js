@@ -3,17 +3,16 @@ import { Image, Platform, StyleSheet, Text, TouchableOpacity, View,SafeAreaView 
 import {Ionicons,AntDesign,FontAwesome} from '@expo/vector-icons'
 
 const SquareButton = (props) => {
-  const {name} = props;
+  const {name,color,textColor} = props;
     return (
-      <View style={styles.container}>
-        <FontAwesome iconStyle={styles.icon} name={name} size={16} />
+      <View style={{...styles.container,backgroundColor:color}}>
+        <FontAwesome iconStyle={styles.icon} color={textColor} name={name} size={16} />
       </View>
     );
   }
   
   const styles = StyleSheet.create({
-     container:{
-       backgroundColor:'#EAEAEA', 
+     container:{ 
        width:40,
        height:40,
        borderRadius:10,

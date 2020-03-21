@@ -7,24 +7,26 @@ import NeumophWrapper from '../../components/NeumophWrapper'
 import ScreenHeader from '../../components/ScreenHeader'
 import SettingListItem from '../../components/SettingListItem'
 
+import {connect} from 'react-redux'
+
 const SettingScreen = (props) => {
-  const { navigation } = props;
+  const { navigation,darkModeColor,darkModeTextColor } = props;
 
   return (
-    <View style={styles.container}> 
+    <View style={{...styles.container,backgroundColor:darkModeColor}}> 
           <SafeAreaView />
         <ScreenHeader title={'SETTING'} navigation={navigation} />
         <View style={styles.profileContainer}>
               <View style={{marginLeft:40,marginRight:20}}>
-                  <NeumophWrapper shadowColor={'#EAEAEA'}>
-                      <View style={styles.profileImageContainer}>
+                  <NeumophWrapper shadowColor={darkModeColor}>
+                      <View style={{...styles.profileImageContainer,backgroundColor:darkModeColor}}>
 
                       </View>
                   </NeumophWrapper>
               </View>
               <View style={styles.profileContentContainer}>
-                  <Text style={styles.profileContentText}>dev.sunjaelee@gmail.com</Text>
-                  <Text style={styles.profileContentText}>이 선재</Text>
+                  <Text style={{...styles.profileContentText,color:darkModeTextColor}}>dev.sunjaelee@gmail.com</Text>
+                  <Text style={{...styles.profileContentText,color:darkModeTextColor}}>이 선재</Text>
               </View> 
           </View>
           <View style={styles.settingContainer}>
@@ -38,8 +40,7 @@ const SettingScreen = (props) => {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor:'#EAEAEA',
+  container: { 
     width:'100%',
     height:'100%' 
   }, 
@@ -49,8 +50,7 @@ const styles = StyleSheet.create({
   profileImageContainer:{
       width:100,
       height:100,
-      borderRadius:25,
-      backgroundColor:'#EAEAEA', 
+      borderRadius:25, 
 
   },
   profileContentContainer:{
@@ -67,4 +67,14 @@ const styles = StyleSheet.create({
 });
 
 
-export default SettingScreen
+const mapStateToProp = (state) =>({
+  darkModeColor: state.darkModeColor,
+  darkModeTextColor:state.darkModeTextColor
+})
+
+const mapDispatchToProp = (dispatch) =>({
+
+})
+
+
+export default connect(mapStateToProp,mapDispatchToProp)(SettingScreen)

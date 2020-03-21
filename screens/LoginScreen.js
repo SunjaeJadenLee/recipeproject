@@ -1,9 +1,19 @@
-import React, { useState } from 'react'
+import React, { useState,useEffect } from 'react'
 import { View, Text, TextInput, StyleSheet } from 'react-native'
 import color from 'color'
 import { TouchableOpacity, TouchableWithoutFeedback } from 'react-native-gesture-handler';
+ 
+import {connect} from 'react-redux'
+import {useColorScheme} from 'react-native-appearance'
+import {setDarkMode} from '../redux/actions'
 
 const LoginScreen = props => {
+    let darkMode = useColorScheme()
+    console.log(darkMode)
+    useEffect(()=>{  
+        props.setDarkMode(darkMode=='dark'?true:false)
+    })
+
     return (
         <View style={styles.container}>
             <View><Text style={{ color: '#fff', fontSize: 60, fontWeight: 'bold', marginBottom: 100 }}>Title</Text></View>
@@ -114,4 +124,14 @@ const styles = StyleSheet.create({
 })
 
 
-export default LoginScreen
+const mapStateToProp = state =>({
+    darkModeColor: state.darkModeColor,
+    darkModeTextColor:state.darkModeTextColor
+})
+
+const mapDispatchToProp = (dispatch) =>({
+    setDarkMode: (darkMode) =>dispatch(setDarkMode(darkMode))
+})
+
+
+export default connect(mapStateToProp,mapDispatchToProp)(LoginScreen)

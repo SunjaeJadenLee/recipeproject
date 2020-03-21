@@ -6,28 +6,29 @@ import ScreenHeader from '../components/ScreenHeader'
 import NeumophWrapper from '../components/NeumophWrapper'
 import RevertNeumophWrapper from '../components/RevertNeumophWrapper'
 
-
+import {connect} from 'react-redux'
+import {setDarkMode} from '../redux/actions'
 
 const mockData = [
   1,2,3
 ]
 
-const renderItem = ({item,index}) =>{
-  return(
-    <RevertNeumophWrapper shadowColor={'#EAEAEA'}>
-          <View style={styles.listContainer}>
-            <NeumophWrapper shadowColor={'#EAEAEA'}>
-              <View style={{ width: 200, height: 200, borderRadius: 100, backgroundColor: '#EAEAEA' }}></View>
-            </NeumophWrapper>
-          </View>
-        </RevertNeumophWrapper>
-  )
-}
-
-export default function HomeScreen(props) {
-  const {navigation} = props;
+const HomeScreen = (props) => {
+  const {navigation,darkModeColor,darkModeTextColor} = props;
+  const renderItem = ({item,index}) =>{
+    return(
+      <RevertNeumophWrapper shadowColor={darkModeColor}>
+            <View style={{...styles.listContainer,backgroundColor:darkModeColor}}>
+              <NeumophWrapper shadowColor={darkModeColor}>
+                <View style={{ width: 200, height: 200, borderRadius: 100, backgroundColor: darkModeColor }}></View>
+              </NeumophWrapper>
+            </View>
+          </RevertNeumophWrapper>
+    )
+  }
+  
   return (
-    <View style={styles.container}>
+    <View style={{...styles.container,backgroundColor:darkModeColor}}>
       <SafeAreaView />
       <ScreenHeader title={'HOME'} navigation={navigation} />
       <View style={{ width: '100%', justifyContent: 'center', alignItems: 'center' }}>
@@ -62,12 +63,14 @@ const styles = StyleSheet.create({
    }
 });
 
-// ios: {
-//   shadowColor: 'black',
-//   shadowOffset: { width: 0, height: -3 },
-//   shadowOpacity: 0.1,
-//   shadowRadius: 3,
-// },
-// android: {
-//   elevation: 20,
-// },
+const mapStateToProp = (state) =>({
+    darkModeColor: state.darkModeColor,
+    darkModeTextColor:state.darkModeTextColor
+})
+
+const mapDispatchToProp = (dispatch) =>({
+
+})
+
+
+export default connect(mapStateToProp,mapDispatchToProp)(HomeScreen)

@@ -6,21 +6,23 @@ import RevertNeumophWrapper from './RevertNeumophWrapper'
 import NeumophWrapper from './NeumophWrapper'
 import SquareButton from './buttons/SquareButton'
 
+import {connect} from 'react-redux'
+
 const ScreenHeader = (props) => {
-  const { navigation } = props;
+  const { navigation,darkModeColor,darkModeTextColor } = props;
 
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
-        <RevertNeumophWrapper shadowColor={'#EAEAEA'}>
+        <RevertNeumophWrapper shadowColor={darkModeColor}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
-            <SquareButton color={'#EAEAEA'} name={'chevron-left'} />
+            <SquareButton color={darkModeColor} name={'chevron-left'} textColor={darkModeTextColor}/>
           </TouchableOpacity>
         </RevertNeumophWrapper>
-        <View style={styles.headerTextContainer}><Text style={styles.headerText}>{props.title}</Text></View>
-        <NeumophWrapper shadowColor={'#EAEAEA'}>
+        <View style={styles.headerTextContainer}><Text style={{...styles.headerText,color:darkModeTextColor}}>{props.title}</Text></View>
+        <NeumophWrapper shadowColor={darkModeColor}>
           <TouchableOpacity onPress={() => navigation.navigate('setting')}>
-            <SquareButton color={'#EAEAEA'} name={'align-center'} />
+            <SquareButton color={darkModeColor} name={'align-center'} textColor={darkModeTextColor}/>
           </TouchableOpacity>
         </NeumophWrapper>
       </View>
@@ -30,7 +32,7 @@ const ScreenHeader = (props) => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#EAEAEA',
+    // backgroundColor: '#EAEAEA',
     paddingHorizontal: 30
   },
   headerContainer: {
@@ -50,4 +52,13 @@ const styles = StyleSheet.create({
 });
 
 
-export default ScreenHeader
+const mapStateToProp = (state) =>({
+  darkModeColor: state.darkModeColor,
+  darkModeTextColor:state.darkModeTextColor
+})
+
+const mapDispatchToProp = (dispatch) =>({
+
+})
+
+export default connect(mapStateToProp,mapDispatchToProp)(ScreenHeader)

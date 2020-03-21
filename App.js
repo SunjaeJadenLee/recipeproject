@@ -11,7 +11,8 @@ import LoginScreen from './screens/LoginScreen'
 import HomeScreen from './screens/HomeScreen'
 import SettingScreen from './screens/setting/SettingScreen'
 
-import useLinking from './navigation/useLinking';
+import {Provider} from 'react-redux'
+import store from './redux/store'
 
 console.disableYellowBox = true;
 
@@ -20,9 +21,7 @@ const HomeStack = createStackNavigator()
 export default function App(props) {
   const [isLoadingComplete, setLoadingComplete] = React.useState(false);
   const [initialNavigationState, setInitialNavigationState] = React.useState();
-  const containerRef = React.useRef();
-  const { getInitialState } = useLinking(containerRef);
-
+  const containerRef = React.useRef(); 
   // Load any resources or data that we need prior to rendering the app
   React.useEffect(() => {
     async function loadResourcesAndDataAsync() {
@@ -64,12 +63,14 @@ export default function App(props) {
     return (
       <View style={styles.container}>
         {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-        <NavigationContainer ref={containerRef} initialState={initialNavigationState}>
-          <rootStack.Navigator screenOptions={{headerShown:false}}>
-              <rootStack.Screen name="login" component={LoginScreen}/>
-              <rootStack.Screen name="home" component={HomeStackScreen} /> 
-          </rootStack.Navigator> 
-        </NavigationContainer>
+        <Provider store={store}>
+          <NavigationContainer ref={containerRef} initialState={initialNavigationState}>
+            <rootStack.Navigator screenOptions={{ headerShown: false }}>
+              <rootStack.Screen name="login" component={LoginScreen} />
+              <rootStack.Screen name="home" component={HomeStackScreen} />
+            </rootStack.Navigator>
+          </NavigationContainer>
+        </Provider>
       </View>
     );
   }
