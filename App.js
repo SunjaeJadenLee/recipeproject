@@ -6,9 +6,10 @@ import { Ionicons } from '@expo/vector-icons';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
-import BottomTabNavigator from './navigation/BottomTabNavigator';
+// import BottomTabNavigator from './navigation/BottomTabNavigator';
 import LoginScreen from './screens/LoginScreen'
 import HomeScreen from './screens/HomeScreen'
+import SettingScreen from './screens/setting/SettingScreen'
 
 import useLinking from './navigation/useLinking';
 
@@ -52,6 +53,7 @@ export default function App(props) {
     return (
       <HomeStack.Navigator screenOptions={{headerShown:false}}>
         <HomeStack.Screen name="home" component={HomeScreen} />
+        <HomeStack.Screen name="setting" component={SettingScreen}/>
       </HomeStack.Navigator>
     )
   }
@@ -65,7 +67,7 @@ export default function App(props) {
         <NavigationContainer ref={containerRef} initialState={initialNavigationState}>
           <rootStack.Navigator screenOptions={{headerShown:false}}>
               <rootStack.Screen name="login" component={LoginScreen}/>
-              <rootStack.Screen name="home" component={HomeStackScreen} />
+              <rootStack.Screen name="home" component={HomeStackScreen} /> 
           </rootStack.Navigator> 
         </NavigationContainer>
       </View>
