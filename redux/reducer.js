@@ -1,7 +1,7 @@
 const initialState = {
     darkModeColor:'#EAEAEA',
     darkModeTextColor:'#000',
-    darkMode:false
+    darkMode:false, 
 }
 
 const reducer = (state=initialState,actions) =>{ 

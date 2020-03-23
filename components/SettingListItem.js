@@ -7,11 +7,11 @@ import {connect} from 'react-redux'
 import ToggleButton from './buttons/ToggleButton'
 
 const SettingListItem = (props) => {
-  const {name,icon,darkModeColor,darkModeTextColor} = props;
+  const {name,icon,darkModeColor,darkModeTextColor,onPress} = props;
     return (
         <View style={styles.container}> 
                 <Text style={{...styles.itemText,color:darkModeTextColor}}>{name}</Text> 
-                <ToggleButton name={icon}/> 
+                <ToggleButton name={icon} onPress={onPress}/> 
         </View>
     );
   }
@@ -35,8 +35,8 @@ const SettingListItem = (props) => {
   
   
   const mapStateToProp = (state) =>({
-    darkModeColor: state.darkModeColor,
-    darkModeTextColor:state.darkModeTextColor
+    darkModeColor: state.darkMode.darkModeColor,
+    darkModeTextColor:state.darkMode.darkModeTextColor
   })
   
   const mapDispatchToProp = (dispatch) =>({

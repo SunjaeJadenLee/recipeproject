@@ -1,5 +1,6 @@
 import React, { useState,useEffect } from 'react'
 import { View, Text, TextInput, StyleSheet } from 'react-native'
+
 import color from 'color'
 import { TouchableOpacity, TouchableWithoutFeedback } from 'react-native-gesture-handler';
  
@@ -8,11 +9,10 @@ import {useColorScheme} from 'react-native-appearance'
 import {setDarkMode} from '../redux/actions'
 
 const LoginScreen = props => {
-    let darkMode = useColorScheme()
-    console.log(darkMode)
+    let darkMode = useColorScheme() 
     useEffect(()=>{  
         props.setDarkMode(darkMode=='dark'?true:false)
-    })
+    },[])
 
     return (
         <View style={styles.container}>
@@ -125,8 +125,8 @@ const styles = StyleSheet.create({
 
 
 const mapStateToProp = state =>({
-    darkModeColor: state.darkModeColor,
-    darkModeTextColor:state.darkModeTextColor
+    darkModeColor: state.darkMode.darkModeColor,
+    darkModeTextColor:state.darkMode.darkModeTextColor
 })
 
 const mapDispatchToProp = (dispatch) =>({
