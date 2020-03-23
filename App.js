@@ -10,6 +10,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import LoginScreen from './screens/LoginScreen'
 import HomeScreen from './screens/HomeScreen'
 import SettingScreen from './screens/setting/SettingScreen'
+import CategoryScreen from './screens/category/CategoryScreen'
 
 import {Provider} from 'react-redux'
 import store from './redux/store'
@@ -28,9 +29,6 @@ export default function App(props) {
       try {
         SplashScreen.preventAutoHide();
 
-        // Load our initial navigation state
-        setInitialNavigationState(await getInitialState());
-
         // Load fonts
         await Font.loadAsync({
           ...Ionicons.font,
@@ -38,7 +36,6 @@ export default function App(props) {
         });
       } catch (e) {
         // We might want to provide this error information to an error reporting service
-        console.warn(e);
       } finally {
         setLoadingComplete(true);
         SplashScreen.hide();
@@ -53,6 +50,7 @@ export default function App(props) {
       <HomeStack.Navigator screenOptions={{headerShown:false}}>
         <HomeStack.Screen name="home" component={HomeScreen} />
         <HomeStack.Screen name="setting" component={SettingScreen}/>
+        <HomeStack.Screen name="category" component={CategoryScreen} />
       </HomeStack.Navigator>
     )
   }
