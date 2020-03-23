@@ -1,6 +1,7 @@
 import * as React from 'react';
 import color from 'color'
-import { Image, Platform, StyleSheet, Text, TouchableOpacity, View,SafeAreaView } from 'react-native';
+import { Image, Platform, Text, TouchableOpacity, View,SafeAreaView } from 'react-native';
+import StyleSheet from 'react-native-extended-stylesheet'
 
 const RevertNeumophWrapper = props => {
     const {children,shadowColor} = props;
@@ -22,8 +23,7 @@ const RevertNeumophWrapper = props => {
     },
     revertInputContainerBottom:{ 
         shadowOffset: { width: 6, height: 6 },
-        shadowOpacity: 1,
-        marginBottom:30
+        shadowOpacity: 1, 
     },
   });
   

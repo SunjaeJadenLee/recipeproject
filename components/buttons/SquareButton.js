@@ -1,6 +1,7 @@
 import * as React from 'react';
-import { Image, Platform, StyleSheet, Text, TouchableOpacity, View,SafeAreaView } from 'react-native';
+import { Image, Platform, Text, TouchableOpacity, View,SafeAreaView } from 'react-native';
 import {Ionicons,AntDesign,FontAwesome} from '@expo/vector-icons'
+import StyleSheet from 'react-native-extended-stylesheet'
 
 const SquareButton = (props) => {
   const {name,color,textColor} = props;
@@ -17,7 +18,7 @@ const SquareButton = (props) => {
        height:40,
        borderRadius:10,
        justifyContent:'center',
-       alignItems:'center'
+       alignItems:'center',  
      },
      icon:{ 
      }
