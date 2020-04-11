@@ -3,29 +3,29 @@ import { Image, Platform, Text, TouchableOpacity, View, SafeAreaView,Dimensions 
 import { ScrollView, TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import StyleSheet from 'react-native-extended-stylesheet'
 
-import RevertNeumophWrapper from '../../components/RevertNeumophWrapper'
-import NeumophWrapper from '../../components/NeumophWrapper' 
+import RevertNeumorphWrapper from '../../components/RevertNeumorphWrapper'
+import NeumorphWrapper from '../../components/NeumorphWrapper' 
 import ScreenHeader from '../../components/ScreenHeader'
 import SettingListItem from '../../components/SettingListItem'
 
 import {connect} from 'react-redux'
 import {setDarkMode} from '../../redux/actions'
+import FastImage from 'react-native-fast-image';
 const REM = Dimensions.get('window').width / 375
 
 const SettingScreen = (props) => {
-  const { navigation,darkModeColor,darkModeTextColor,darkMode,setDarkMode } = props;
-
+  const { navigation,darkModeColor,darkModeTextColor,darkMode,setDarkMode,userinfo } = props;
   return (
     <View style={{...styles.container,backgroundColor:darkModeColor}}> 
           <SafeAreaView />
         <ScreenHeader title={'SETTING'} navigation={navigation} />
         <View style={styles.profileContainer}>
               <View style={{marginLeft:40*REM,marginRight:20*REM}}>
-                  <NeumophWrapper shadowColor={darkModeColor}>
+                  <NeumorphWrapper shadowColor={darkModeColor}>
                       <View style={{...styles.profileImageContainer,backgroundColor:darkModeColor}}>
-
+                          <FastImage style={styles.image} source={{uri:userinfo.user.photo}}/>
                       </View>
-                  </NeumophWrapper>
+                  </NeumorphWrapper>
               </View>
               <View style={styles.profileContentContainer}>
                   <Text style={{...styles.profileContentText,color:darkModeTextColor}}>dev.sunjaelee@gmail.com</Text>
@@ -36,6 +36,7 @@ const SettingScreen = (props) => {
                 <SettingListItem name={'푸시 알람'} icon={'bell-o'}/>
                 <SettingListItem name={'다크 모드'} icon={'adjust'} onPress={'darkMode'}/>
                 <SettingListItem name={'프로필 변경'} icon={'pencil'}/>
+                <SettingListItem name={'도움말'} icon={'question'} onPress={'question'}/>
                 <SettingListItem name={'디버깅'} icon={'gear'}/>
         </View>
     </View>
@@ -55,7 +56,11 @@ const styles = StyleSheet.create({
       width:'90rem',
       height:'90rem',
       borderRadius:'25rem', 
-
+  },
+  image:{
+    width:'90rem',
+    height:'90rem',
+    borderRadius:'25rem', 
   },
   profileContentContainer:{
     justifyContent:'center', 
@@ -74,7 +79,8 @@ const styles = StyleSheet.create({
 const mapStateToProp = (state) =>({
   darkModeColor: state.darkMode.darkModeColor,
   darkModeTextColor:state.darkMode.darkModeTextColor,
-  darkMode:state.darkMode.darkMode
+  darkMode:state.darkMode.darkMode,
+  userinfo:state.auth.userinfo
 })
 
 const mapDispatchToProp = (dispatch) =>({

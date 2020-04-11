@@ -3,7 +3,7 @@ import color from 'color'
 import { Image, Platform, Text, TouchableOpacity, View,SafeAreaView } from 'react-native';
 import StyleSheet from 'react-native-extended-stylesheet'
 
-const RevertNeumophWrapper = props => {
+const RevertNeumorphWrapper = props => {
     const {children,shadowColor} = props;
 
     return (
@@ -28,4 +28,4 @@ const RevertNeumophWrapper = props => {
   });
   
   
-  export default RevertNeumophWrapper
+  export default RevertNeumorphWrapper

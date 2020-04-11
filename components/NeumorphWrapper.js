@@ -3,7 +3,7 @@ import color from 'color'
 import { Image, Platform, Text, TouchableOpacity, View,SafeAreaView } from 'react-native';
 import StyleSheet from 'react-native-extended-stylesheet'
 
-const NeumophWrapper = props => {
+const NeumorphWrapper = props => {
     const {children,shadowColor,style} = props;
 
     return (
@@ -32,4 +32,4 @@ const NeumophWrapper = props => {
   });
   
   
-  export default NeumophWrapper
+  export default NeumorphWrapper

@@ -4,6 +4,7 @@ const REM = Dimensions.get('window').width / 375
 
 const initialState = { 
     initialIngCategory:[],
+    initalIngCategoryDetail:[],
     secondIngCategory:[],
     thirdIngCategory:[],
     selected_category:[],
@@ -19,7 +20,9 @@ const reducer = (state=initialState,actions) =>{
 
     switch(actions.type){
         case 'SETINITAILCATEGORY':
-            return {...state,initialIngCategory:actions.initialIngCategory}
+            return { ...state, initialIngCategory: actions.initialIngCategory }
+        case 'SETINITAILCATEGORYDATAIL':
+            return { ...state, initalIngCategoryDetail: actions.initalIngCategoryDetail }
         case 'SETSECONDCATEGORY':
             return { ...state, secondIngCategory: actions.secondIngCategory }
         case 'SETTHIRDCATEGORY':
@@ -30,7 +33,8 @@ const reducer = (state=initialState,actions) =>{
             } else {
                 return {...state,selected_category:state.selected_category.filter(e=>e!==actions.category)}
             }
-        
+        case 'RESETINGCATEGORY': 
+            return {...state,selected_category:[]}
         case 'SETCATEGORYPAGE':
            return {...state,category_page:actions.category_page};
         case 'SETCATEGORYPAGEREF':

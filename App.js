@@ -11,6 +11,10 @@ import LoginScreen from './screens/LoginScreen'
 import HomeScreen from './screens/HomeScreen'
 import SettingScreen from './screens/setting/SettingScreen'
 import CategoryScreen from './screens/category/CategoryScreen'
+import ProfileScreen from './screens/recipe/ProfileScreen'
+import AddRecipeScreen from './screens/recipe/AddRecipeScreen'
+import CategorySelectScreen from './screens/recipe/CategorySelectScreen'
+import CategoryDetailScreen from './screens/recipe/CategoryDetailScreen'
 
 import {Provider} from 'react-redux'
 import store from './redux/store'
@@ -18,7 +22,8 @@ import store from './redux/store'
 console.disableYellowBox = true;
 
 const rootStack = createStackNavigator();
-const HomeStack = createStackNavigator()
+const HomeStack = createStackNavigator();
+const RecipeStack  = createStackNavigator();
 export default function App(props) {
   const [isLoadingComplete, setLoadingComplete] = React.useState(false);
   const [initialNavigationState, setInitialNavigationState] = React.useState();
@@ -51,7 +56,20 @@ export default function App(props) {
         <HomeStack.Screen name="home" component={HomeScreen} />
         <HomeStack.Screen name="setting" component={SettingScreen}/>
         <HomeStack.Screen name="category" component={CategoryScreen} />
+        <HomeStack.Screen name="profile" component={RecipeStackScreen} />
       </HomeStack.Navigator>
+    )
+  }
+
+  const RecipeStackScreen = props =>{
+    return (
+      <RecipeStack.Navigator screenOptions={{headerShown:false}}>
+        <RecipeStack.Screen name="profile" component={ProfileScreen} />
+        <RecipeStack.Screen name="recipe" component={AddRecipeScreen}/> 
+        <RecipeStack.Screen name='select' component={CategorySelectScreen}/>
+        <RecipeStack.Screen name='category_detail' component={CategoryDetailScreen}/>
+
+      </RecipeStack.Navigator>
     )
   }
 

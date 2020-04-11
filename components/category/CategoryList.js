@@ -4,16 +4,19 @@ import {Ionicons,AntDesign,FontAwesome} from '@expo/vector-icons'
 import StyleSheet from 'react-native-extended-stylesheet'
 
 import {connect} from 'react-redux'
-import NeumophWrapper from './NeumophWrapper'
-import CategoryButton from './buttons/CategoryButton'
+import NeumorphWrapper from '../NeumorphWrapper'
+import CategoryButton from '../buttons/CategoryButton'
 
 const CategoryList = (props) => {
-  const [toggle, setToggle] = useState(false);
-  const { darkMode, darkModeColor, darkModeTextColor, data,isType } = props;
+
+const { darkMode, darkModeColor, darkModeTextColor, data,isType, ingredient,selectList,setRefs,refs,
+      isAdd,ing,setIng,type,setType } = props;
+
   return (
-    <View style={styles.container}>
-      {data.map(e =>
-        <CategoryButton name={e} isType={isType}/>)}
+    <View style={styles.container}> 
+      {data.map((e,i) =>
+        <CategoryButton key={e} refs={refs} setRefs={setRefs} selectList={selectList} ingredient={ingredient} name={typeof e == 'object'?e.name:e} id={typeof e == 'object' ? e.id:null} isType={isType}
+          isAdd={isAdd} setIng={setIng} ing={ing} type={type} setType={setType}/>)}
     </View>
   );
 }

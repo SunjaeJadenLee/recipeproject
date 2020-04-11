@@ -3,6 +3,11 @@ export const setInitialCategory = (initialIngCategory) =>({
     initialIngCategory
 })
 
+export const setIngredientCategoryDatail = (initalIngCategoryDetail) => ({
+    type:'SETINITAILCATEGORYDATAIL',
+    initalIngCategoryDetail
+})
+
 export const setSecondCategory = (secondIngCategory) =>({
     type:'SETSECONDCATEGORY',
     secondIngCategory
@@ -17,6 +22,11 @@ export const setIngredientCategory = (category) =>({
     type:'SETINGCATEGORY',
     category
 })
+
+export const resetIngredientCategory = (category) =>({
+    type:'RESETINGCATEGORY',
+    category
+}) 
 
 export const setTypeCategory = (category) =>({
     type:'SETTYPECATEGORY',

@@ -4,10 +4,10 @@ import {Ionicons,AntDesign,FontAwesome} from '@expo/vector-icons'
 import StyleSheet from 'react-native-extended-stylesheet'
 
 import {connect} from 'react-redux'
-import NeumophWrapper from './NeumophWrapper'
-import SquareButton from './buttons/SquareButton'
+import NeumorphWrapper from '../NeumorphWrapper'
+import SquareButton from '../buttons/SquareButton'
 
-import ToggleButton from './buttons/ToggleButton'
+import ToggleButton from '../buttons/ToggleButton'
 
 const CategoryHeader = (props) => {
   const {name,icon,darkModeColor,darkModeTextColor,onPress,isType,category_page} = props;
@@ -15,16 +15,16 @@ const CategoryHeader = (props) => {
         <View style={styles.container}>
             <View style={styles.headerContainer}>
                 <View style={styles.headerTextContainer}><Text style={{ ...styles.headerText, color: darkModeTextColor }}>{name}</Text></View>
-                {(onPress&&!isType)&&<NeumophWrapper shadowColor={darkModeColor}>
+                {(onPress&&!isType)&&<NeumorphWrapper shadowColor={darkModeColor}>
                     <TouchableOpacity onPress={onPress}>
                         <SquareButton color={darkModeColor} name={'chevron-right'} textColor={darkModeTextColor} />
                     </TouchableOpacity>
-                </NeumophWrapper>}
-                {(onPress&&isType&&category_page!==0)&&<NeumophWrapper shadowColor={darkModeColor}>
+                </NeumorphWrapper>}
+                {(onPress&&isType&&category_page!==0)&&<NeumorphWrapper shadowColor={darkModeColor}>
                     <TouchableOpacity onPress={onPress}>
                         <SquareButton color={darkModeColor} name={'chevron-left'} textColor={darkModeTextColor} />
                     </TouchableOpacity>
-                </NeumophWrapper>}
+                </NeumorphWrapper>}
             </View>
     </View>
     );

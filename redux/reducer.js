@@ -1,3 +1,4 @@
+
 const initialState = {
     darkModeColor:'#EAEAEA',
     darkModeTextColor:'#000',
@@ -5,6 +6,7 @@ const initialState = {
 }
 
 const reducer = (state=initialState,actions) =>{ 
+
     switch(actions.type){
         case 'SETDARKMODE':
             if(actions.darkMode == true){

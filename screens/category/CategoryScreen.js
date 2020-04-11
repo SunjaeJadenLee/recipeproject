@@ -1,15 +1,15 @@
-import React,{useRef,useEffect} from 'react';
+import React,{useRef,useEffect,useState} from 'react';
 import { Image, Platform, Animated, TouchableOpacity, View, SafeAreaView,ScrollView,Dimensions, FlatList } from 'react-native';
 import StyleSheet from 'react-native-extended-stylesheet'
 
-import RevertNeumophWrapper from '../../components/RevertNeumophWrapper'
-import NeumophWrapper from '../../components/NeumophWrapper' 
+import RevertNeumorphWrapper from '../../components/RevertNeumorphWrapper'
+import NeumorphWrapper from '../../components/NeumorphWrapper' 
 import ScreenHeader from '../../components/ScreenHeader'
 import SettingListItem from '../../components/SettingListItem'
-import CategoryHeader from '../../components/CategoryHeader'
-import CategoryList from '../../components/CategoryList'
-import CategorySearchBar from '../../components/CategorySearchBar'
-import CategorySlider from '../../components/CategorySlider'
+import CategoryHeader from '../../components/category/CategoryHeader'
+import CategoryList from '../../components/category/CategoryList'
+import CategorySearchBar from '../../components/category/CategorySearchBar'
+import CategorySlider from '../../components/category/CategorySlider'
 
 import {connect} from 'react-redux'
 import {setDarkMode} from '../../redux/actions'
@@ -24,7 +24,7 @@ const CategoryScreen = (props) => {
     secondIngCategory,thirdIngCategory
   } = props;
   const flatlist = useRef(null);
-   
+  const [refs,setRefs] = useState({});
   flatlist&&setCategoryPageRef(flatlist); 
   
   const data = [
@@ -36,12 +36,12 @@ const CategoryScreen = (props) => {
   return (
     <View style={{...styles.container,backgroundColor:darkModeColor}}> 
         <SafeAreaView />
-        <ScreenHeader title={'SEARCH'} navigation={navigation} /> 
+        <ScreenHeader title={'SEARCH'} navigation={navigation} hasCategory={true}/> 
       <ScrollView>
-        <CategoryList data={selected_category}/>
+        <CategoryList data={selected_category} selectList={true}/>
         <CategoryHeader name={'종류별'} />
         <CategorySearchBar/> 
-          <CategoryList data={category_type}/> 
+          <CategoryList data={category_type} setRefs={setRefs} refs={refs} ingredient={false}/> 
         <CategoryHeader name={'재료별'} onPress={()=>{ 
           if(category_page!==0){
             category_pageRef.current.scrollToIndex({index:category_page-1})

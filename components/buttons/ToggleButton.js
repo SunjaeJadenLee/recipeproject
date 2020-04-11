@@ -1,12 +1,12 @@
 import React,{useState,useEffect} from 'react';
-import { Image, Platform, Text, TouchableOpacity, View,SafeAreaView } from 'react-native';
+import { Image, Platform, Text, TouchableOpacity, View,SafeAreaView,AsyncStorage } from 'react-native';
 import {Ionicons,AntDesign,FontAwesome} from '@expo/vector-icons'
 import StyleSheet from 'react-native-extended-stylesheet'
 
 import {connect} from 'react-redux'
 
-import NeumophWrapper from '../NeumophWrapper'
-import RevertNeumophWrapper from '../RevertNeumophWrapper'
+import NeumorphWrapper from '../NeumorphWrapper'
+import RevertNeumorphWrapper from '../RevertNeumorphWrapper'
 import { setDarkMode } from '../../redux/actions';
 
 const ToggleButton = (props) => {
@@ -14,7 +14,53 @@ const ToggleButton = (props) => {
   const {name,darkMode,darkModeColor,darkModeTextColor,onPress,setDarkMode} = props;
 
   useEffect(() => { 
-    setOnOff(props.darkMode);
+    // setOnOff(props.darkMode); 
+    switch (onPress) {
+      case 'question': 
+        AsyncStorage.getItem('question').then(result=>{
+          if(result == 'true' || null){
+            console.log('question: ' + result)
+            setOnOff(true)
+          } else {
+            setOnOff(false)
+          }
+        })
+        break;
+      case 'darkMode':
+          AsyncStorage.getItem('darkMode').then(result=>{
+            if(result == 'true'){
+              setOnOff(true)
+            } else {
+              setOnOff(false)
+            }
+          })
+          break;
+      case undefined:
+          setOnOff(false)
+      //   AsyncStorage.getItem('question').then(result => { 
+      //     console.log('question: ' + result)
+      //     if (result == null || result == 'true') {
+      //       AsyncStorage.setItem('question', 'true')
+      //       setOnOff(true)
+      //     } else {
+      //       setOnOff(false)
+      //     }
+      //   })
+      // case 'darkMode':
+      //   AsyncStorage.getItem('darkMode').then(result => {
+      //     console.log('darkMode: ' + result)
+      //     if (result == null || result == 'true') {
+      //       AsyncStorage.setItem('darkMode', 'true')
+      //       setOnOff(true)
+      //     } else {
+      //       setOnOff(false)
+      //     }
+      //   })
+      //   break;
+
+      default:
+        break;
+    }
   },[]) 
 
   const onButtonPress = (onPress) =>{ 
@@ -22,13 +68,24 @@ const ToggleButton = (props) => {
       case 'darkMode': 
         setOnOff(!darkMode);
         setDarkMode(!darkMode);
+        AsyncStorage.getItem('darkMode').then(result=>{  
+          result == 'true'? AsyncStorage.setItem('darkMode','false') : AsyncStorage.setItem('darkMode','true')
+        })
+        break;
+      case 'question':
+        setOnOff(!onOff); 
+        AsyncStorage.getItem('question').then(result=>{  
+          result == 'true'? AsyncStorage.setItem('question','false') : AsyncStorage.setItem('question','true')
+        })
         break;
     }
-  }
+  } 
+
+  onPress =='question' &&console.log('render question: '+ onOff)
 
     return (
       <>
-        {onOff?<RevertNeumophWrapper shadowColor={onOff && name == 'adjust' ? 'rgb(239,219,150)' : darkModeColor}>
+        {onOff?<RevertNeumorphWrapper shadowColor={onOff && name == 'adjust' ? 'rgb(239,219,150)' : darkModeColor}>
           <TouchableOpacity onPress={()=>{
             onButtonPress(onPress)
           }}>
@@ -36,8 +93,8 @@ const ToggleButton = (props) => {
               <FontAwesome iconStyle={styles.icon} color={darkModeTextColor} name={name} size={16} />
             </View>
           </TouchableOpacity>
-        </RevertNeumophWrapper>
-        :<NeumophWrapper shadowColor={onOff && name == 'adjust' ? 'rgb(239,219,150)' : darkModeColor}>
+        </RevertNeumorphWrapper>
+        :<NeumorphWrapper shadowColor={onOff && name == 'adjust' ? 'rgb(239,219,150)' : darkModeColor}>
         <TouchableOpacity onPress={()=>{
           onButtonPress(onPress)
         }}>
@@ -45,7 +102,7 @@ const ToggleButton = (props) => {
             <FontAwesome iconStyle={styles.icon} color={darkModeTextColor} name={name} size={16} />
           </View>
         </TouchableOpacity>
-      </NeumophWrapper>}
+      </NeumorphWrapper>}
       </>
     );
   }

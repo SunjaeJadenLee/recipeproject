@@ -5,10 +5,10 @@ import color from 'color'
 import StyleSheet from 'react-native-extended-stylesheet'
 
 import {connect} from 'react-redux'
-import RevertNeumophWrapper from './RevertNeumophWrapper'
-import CategoryButton from './buttons/CategoryButton' 
-import SquareButton from './buttons/SquareButton'
-import NeumophWrapper from './NeumophWrapper';
+import RevertNeumorphWrapper from '../RevertNeumorphWrapper'
+import CategoryButton from '../buttons/CategoryButton' 
+import SquareButton from '../buttons/SquareButton'
+import NeumorphWrapper from '../NeumorphWrapper';
  
 const CategoryList = (props) => {
   const {darkMode,darkModeColor,darkModeTextColor,minVal,maxVal} = props;

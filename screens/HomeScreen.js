@@ -1,16 +1,18 @@
 import * as React from 'react';
-import { Image, Platform, Text, Dimensions, View,SafeAreaView, FlatList } from 'react-native';
+import { Image, Platform, Text, Dimensions, View,SafeAreaView, FlatList, TouchableOpacity } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 
 import ScreenHeader from '../components/ScreenHeader'
-import NeumophWrapper from '../components/NeumophWrapper'
-import RevertNeumophWrapper from '../components/RevertNeumophWrapper'
-import CategoryHeader from '../components/CategoryHeader'
-import NewFeedList from '../components/NewFeedList'
+import NeumorphWrapper from '../components/NeumorphWrapper'
+import RevertNeumorphWrapper from '../components/RevertNeumorphWrapper'
+import CategoryHeader from '../components/category/CategoryHeader'
+import NewFeedList from '../components/NewFeedList' 
 
 import {connect} from 'react-redux'
 import {setDarkMode} from '../redux/actions'
 import StyleSheet from 'react-native-extended-stylesheet'
+import SquareButton from '../components/buttons/SquareButton';
+import HomeInstruction from './instruction/HomeInstruction';
 
 
 const mockData = [
@@ -28,22 +30,32 @@ const HomeScreen = (props) => {
   const {navigation,darkModeColor,darkModeTextColor} = props;
   const renderItem = ({item,index}) =>{
     return(
-      <RevertNeumophWrapper shadowColor={darkModeColor}>
+      <RevertNeumorphWrapper shadowColor={darkModeColor}>
         <View style={{ ...styles.listContainer, backgroundColor: darkModeColor }}>
-          <NeumophWrapper shadowColor={darkModeColor}>
+          <NeumorphWrapper shadowColor={darkModeColor}>
             <View style={{ width: 180*REM, height: 180*REM, borderRadius: 90*REM, backgroundColor: darkModeColor }}></View>
-          </NeumophWrapper>
+          </NeumorphWrapper>
         </View>
-      </RevertNeumophWrapper>
+      </RevertNeumorphWrapper>
     )
   }
   
   return (
     <View style={{...styles.container,backgroundColor:darkModeColor}}>
       <SafeAreaView />
+      <HomeInstruction />
       <ScreenHeader title={'HOME'} navigation={navigation} />
-      <CategoryHeader name={'추천 리스트'}/>
-      <View style={{ width: '100%', justifyContent: 'center', alignItems: 'center',marginVertical:20*REM }}>
+      <View style={{width:'100%'}}>
+        <NeumorphWrapper shadowColor={darkModeColor}>
+          <TouchableOpacity onPress={() => navigation.navigate('profile')}>
+            <View style={styles.profileButton}>
+              <SquareButton color={darkModeColor} name={'th'} textColor={darkModeTextColor} />
+            </View>
+          </TouchableOpacity>
+        </NeumorphWrapper>
+      </View> 
+      {/* <CategoryHeader name={'추천 리스트'}/>  */}
+      {/* <View style={{ width: '100%', justifyContent: 'center', alignItems: 'center',marginVertical:20*REM }}>
         <FlatList 
         data={mockData}
         renderItem={renderItem}
@@ -51,7 +63,7 @@ const HomeScreen = (props) => {
         pagingEnabled={true}
         showsHorizontalScrollIndicator={false}
         />
-      </View>
+      </View> */}
       <CategoryHeader name={'카테고리별 검색'} onPress={()=>navigation.navigate('category')}/>
       <CategoryHeader name={'새 피드'} />
       <NewFeedList />
@@ -75,6 +87,11 @@ const styles = StyleSheet.create({
      backgroundColor:'#EAEAEA',
      justifyContent:'center',
      alignItems:'center', 
+   }, 
+   profileButton:{
+     marginLeft:'auto',
+     marginRight:'27rem',
+     marginTop:'5rem'
    }
 });
 
