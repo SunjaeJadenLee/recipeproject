@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Image, Platform, Text, TouchableOpacity, View, FlatList, Dimensions } from 'react-native';
+import { Image, Platform, Text, TouchableOpacity, View, FlatList, Dimensions, TouchableWithoutFeedback } from 'react-native';
 import { Ionicons, AntDesign, Entypo, MaterialCommunityIcons, FontAwesome } from '@expo/vector-icons'
 import StyleSheet from 'react-native-extended-stylesheet' 
 import FastImage from 'react-native-fast-image'
@@ -12,34 +12,38 @@ const REM = Dimensions.get('window').width / 375
 
 
 const NewFeedItem = (props) => {
-  const { name, icon, darkModeColor, darkModeTextColor, onPress, data } = props;
-  const [like, setLike] = useState(false);
-  console.log(data)
+  const { navigation,name, icon, darkModeColor, darkModeTextColor, onPress, data } = props;
+  const [like, setLike] = useState(false); 
   return (
-    <NeumorphWrapper shadowColor={darkModeColor}>
-      <View style={{ ...styles.container, backgroundColor: darkModeColor }}>
-        <View style={styles.header}>
-          <RevertNeumorphWrapper shadowColor={darkModeColor}>
-            <Image style={{ ...styles.profileImage, backgroundColor: darkModeColor }} />
-          </RevertNeumorphWrapper>
-          <View style={styles.nameContainer}><Text style={styles.nameText}>{data.name}</Text></View>
-          <View style={styles.icon}>
-            <Entypo color={darkModeTextColor} name={'dots-three-vertical'} size={18 * REM} />
-          </View>
-        </View>
-        {data.image_urls && <FastImage style={styles.image} source={{ uri: data.image_urls[0] }} />}
-        <View style={styles.feedFooter}>
-          <TouchableOpacity onPress={() => setLike(!like)}>
+      <NeumorphWrapper shadowColor={darkModeColor}>
+        <TouchableWithoutFeedback onPress={()=>navigation.navigate('recipe_detail',{data:data})}>
+        <View style={{ ...styles.container, backgroundColor: darkModeColor }}>
+          <View style={styles.header}>
             <RevertNeumorphWrapper shadowColor={darkModeColor}>
-              <FontAwesome name={'spoon'} size={16 * REM} color={like ? darkModeTextColor : darkModeColor} />
+              <FastImage style={{ ...styles.profileImage, backgroundColor: darkModeColor }} source={{ uri: data.user.photo }} />
             </RevertNeumorphWrapper>
-          </TouchableOpacity>
-          <View style={styles.likeTextContainer}>
-            <Text style={{ ...styles.likeText, color: darkModeTextColor }}>3,152</Text>
+            <View style={styles.nameContainer}>
+              <Text style={styles.nameText}>{data.name}</Text>
+              <Text>{data.user.name}</Text>
+            </View>
+            <View style={styles.icon}>
+              <Entypo color={darkModeTextColor} name={'dots-three-vertical'} size={18 * REM} />
+            </View>
+          </View>
+          {data.image_urls && <FastImage style={styles.image} source={{ uri: data.image_urls[0] }} />}
+          <View style={styles.feedFooter}>
+            <TouchableOpacity onPress={() => setLike(!like)}>
+              <RevertNeumorphWrapper shadowColor={darkModeColor}>
+                <FontAwesome name={'spoon'} size={16 * REM} color={like ? darkModeTextColor : darkModeColor} />
+              </RevertNeumorphWrapper>
+            </TouchableOpacity>
+            <View style={styles.likeTextContainer}>
+              <Text style={{ ...styles.likeText, color: darkModeTextColor }}>3,152</Text>
+            </View>
           </View>
         </View>
-      </View>
-    </NeumorphWrapper>
+        </TouchableWithoutFeedback>
+      </NeumorphWrapper>
   );
 }
 
@@ -61,7 +65,7 @@ const styles = StyleSheet.create({
     marginBottom:'10rem'
   },
   nameContainer:{
-    marginTop:'30rem',
+    marginTop:'20rem',
     marginLeft:'15rem'
   },
   nameText:{
