@@ -66,7 +66,7 @@ const HomeScreen = (props) => {
       </View> */}
       <CategoryHeader name={'카테고리별 검색'} onPress={()=>navigation.navigate('category')}/>
       <CategoryHeader name={'새 피드'} />
-      <NewFeedList />
+      <NewFeedList navigation={navigation}/>
     </View>
   );
 }

@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, {useState,useEffect} from 'react';
 import { Image, Platform, Text, TouchableOpacity, View, SafeAreaView,Dimensions } from 'react-native';
 import { ScrollView, TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import StyleSheet from 'react-native-extended-stylesheet'
@@ -15,6 +15,11 @@ const REM = Dimensions.get('window').width / 375
 
 const SettingScreen = (props) => {
   const { navigation,darkModeColor,darkModeTextColor,darkMode,setDarkMode,userinfo } = props;
+  const [isEdit,setIsEdit] = useState(false);
+
+  useEffect(()=>{
+    console.log(isEdit);
+  },[isEdit])
   return (
     <View style={{...styles.container,backgroundColor:darkModeColor}}> 
           <SafeAreaView />
@@ -35,7 +40,7 @@ const SettingScreen = (props) => {
           <View style={styles.settingContainer}>
                 <SettingListItem name={'푸시 알람'} icon={'bell-o'}/>
                 <SettingListItem name={'다크 모드'} icon={'adjust'} onPress={'darkMode'}/>
-                <SettingListItem name={'프로필 변경'} icon={'pencil'}/>
+                <SettingListItem name={'프로필 변경'} icon={'pencil'} setIsEdit={setIsEdit} isEdit={isEdit} onPress={'profile'}/>
                 <SettingListItem name={'도움말'} icon={'question'} onPress={'question'}/>
                 <SettingListItem name={'디버깅'} icon={'gear'}/>
         </View>

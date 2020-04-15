@@ -11,15 +11,14 @@ import { setDarkMode } from '../../redux/actions';
 
 const ToggleButton = (props) => {
   const [onOff,setOnOff] = useState(false);
-  const {name,darkMode,darkModeColor,darkModeTextColor,onPress,setDarkMode} = props;
+  const {name,darkMode,darkModeColor,darkModeTextColor,onPress,setDarkMode,setIsEdit,isEdit} = props;
 
   useEffect(() => { 
     // setOnOff(props.darkMode); 
     switch (onPress) {
       case 'question': 
         AsyncStorage.getItem('question').then(result=>{
-          if(result == 'true' || null){
-            console.log('question: ' + result)
+          if(result == 'true' || null){ 
             setOnOff(true)
           } else {
             setOnOff(false)
@@ -77,6 +76,11 @@ const ToggleButton = (props) => {
         AsyncStorage.getItem('question').then(result=>{  
           result == 'true'? AsyncStorage.setItem('question','false') : AsyncStorage.setItem('question','true')
         })
+        break;
+
+      case 'profile':
+        setOnOff(!onOff);
+        setIsEdit(!isEdit);
         break;
     }
   } 

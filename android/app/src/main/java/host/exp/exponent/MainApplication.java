@@ -13,6 +13,7 @@ import okhttp3.OkHttpClient;
 
 // Needed for `react-native link`
 // import com.facebook.react.ReactApplication;
+import com.dooboolab.kakaologins.RNKakaoLoginsPackage;
 import co.apptailor.googlesignin.RNGoogleSigninPackage;
 import io.invertase.firebase.app.ReactNativeFirebaseAppPackage;
 import io.invertase.firebase.messaging.ReactNativeFirebaseMessagingPackage;
@@ -33,6 +34,7 @@ public class MainApplication extends ExpoApplication implements AppLoaderPackage
 
         // Needed for `react-native link`
         // new MainReactPackage(),
+            new RNKakaoLoginsPackage(),
             new RNGoogleSigninPackage(),
             new ReactNativeFirebaseAppPackage(),
             new ReactNativeFirebaseMessagingPackage(),

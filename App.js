@@ -15,6 +15,7 @@ import ProfileScreen from './screens/recipe/ProfileScreen'
 import AddRecipeScreen from './screens/recipe/AddRecipeScreen'
 import CategorySelectScreen from './screens/recipe/CategorySelectScreen'
 import CategoryDetailScreen from './screens/recipe/CategoryDetailScreen'
+import RecipeDetailScreen from './screens/recipe/RecipeDetailScreen'
 
 import {Provider} from 'react-redux'
 import store from './redux/store'
@@ -57,6 +58,7 @@ export default function App(props) {
         <HomeStack.Screen name="setting" component={SettingScreen}/>
         <HomeStack.Screen name="category" component={CategoryScreen} />
         <HomeStack.Screen name="profile" component={RecipeStackScreen} />
+        <HomeStack.Screen name='recipe_detail' component={RecipeDetailScreen} />
       </HomeStack.Navigator>
     )
   }
@@ -68,7 +70,6 @@ export default function App(props) {
         <RecipeStack.Screen name="recipe" component={AddRecipeScreen}/> 
         <RecipeStack.Screen name='select' component={CategorySelectScreen}/>
         <RecipeStack.Screen name='category_detail' component={CategoryDetailScreen}/>
-
       </RecipeStack.Navigator>
     )
   }

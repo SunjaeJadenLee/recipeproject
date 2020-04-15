@@ -1,6 +1,7 @@
 import React, { useState,useEffect } from 'react'
 import { View, Text, TextInput, StyleSheet,AsyncStorage } from 'react-native'
-import {GoogleSignin,GoogleSigninButton,statusCodes} from '@react-native-community/google-signin'
+import {GoogleSignin,statusCodes} from '@react-native-community/google-signin'
+import KakaoLogin from '@react-native-seoul/kakao-login'
 import color from 'color'
 import { TouchableOpacity, TouchableWithoutFeedback } from 'react-native-gesture-handler';
  
@@ -32,6 +33,7 @@ const LoginScreen = props => {
 
         AsyncStorage.getItem('userinfo').then(result=>{
             if(result){
+                console.log(result)
                 props.setUserinfo(JSON.parse(result));
                 props.navigation.navigate('home'); 
             } 
@@ -42,12 +44,23 @@ const LoginScreen = props => {
         try {
             await GoogleSignin.hasPlayServices();
             GoogleSignin.signIn().then(e=>{
-                props.navigation.navigate('home');
-                props.setUserinfo(e);
-                console.log(e)
-                if(keepLoggedin){
-                    AsyncStorage.setItem('userinfo',JSON.stringify(e));
-                }
+                let headers = new Headers();
+                headers.append('Content-Type', 'application/json'); 
+                console.log({...e.user,platform:'google'})
+                fetch('http://localhost:5000/addUser',{
+                    method:'POST',
+                    headers:headers,
+                    body:JSON.stringify({user:{...e.user,platform:'google'}})
+                }).then(res=>{
+                    res.json().then(resJson=>{
+                        console.log(resJson)
+                        props.navigation.navigate('home');
+                        props.setUserinfo(e); 
+                        if(keepLoggedin){
+                            AsyncStorage.setItem('userinfo',JSON.stringify(e));
+                        }
+                    })
+                }) 
             }); 
 
           } catch (error) {
@@ -64,10 +77,23 @@ const LoginScreen = props => {
           }
     }   
 
+    const loginWithKakao = async () =>{
+        KakaoLogin.login().then(f=>{
+            KakaoLogin.getProfile().then(e=>{
+                props.navigation.navigate('home');
+                props.setUserinfo(e);
+                console.log(e)
+                if(keepLoggedin){
+                    AsyncStorage.setItem('userinfo',JSON.stringify(e));
+                }
+            })
+        }).catch(err=>console.log(err))
+    }
+
     return (
         <View style={styles.container}>
-            <View><Text style={{ color: '#fff', fontSize: 60, fontWeight: 'bold', marginBottom: 100 }}>Title</Text></View>
-            <View style={styles.inputContainerTop}>
+            <View><Text style={{ color: '#fff', fontSize: 60, fontWeight: 'bold', marginBottom: 100 }}>Recipe</Text></View>
+            {/* <View style={styles.inputContainerTop}>
                 <View style={styles.inputContainerBottom}>
                     <View style={styles.inputInnerContainer}>
                         <TextInput style={styles.input} />
@@ -80,7 +106,7 @@ const LoginScreen = props => {
                         <TextInput style={styles.input} />
                     </View>
                 </View>
-            </View>
+            </View> */}
             <View style={styles.checkboxContainer}>
                 <View style={styles.revertInputContainerTop}>
                     <View style={styles.revertInputContainerBottom}>
@@ -95,9 +121,9 @@ const LoginScreen = props => {
             </View>
             <View style={styles.inputContainerTop}>
                 <View style={styles.inputContainerBottom}>
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={loginWithKakao}>
                         <View style={styles.inputInnerContainer}>
-                            <Text style={{ color: '#fff', lineHeight: 70, textAlign: 'center' }}>로그인</Text>
+                            <Text style={{ color: '#fff', lineHeight: 70, textAlign: 'center' }}>카카오 계정으로 로그인</Text>
                         </View> 
                     </TouchableOpacity>
                 </View>

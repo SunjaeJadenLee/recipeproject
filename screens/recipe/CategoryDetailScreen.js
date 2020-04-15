@@ -22,7 +22,7 @@ const CategoryDetailScreen = (props) => {
   const { navigation, route, darkModeColor, darkModeTextColor, darkMode, setDarkMode,
     category_type, selected_category, category_ingredient,
     category_page, setCategoryPage, setCategoryPageRef, category_pageRef,
-    secondIngCategory, thirdIngCategory,
+    secondIngCategory, thirdIngCategory,userinfo
   } = props;
 
   const [ing, setIng] = useState([]);
@@ -82,6 +82,8 @@ const CategoryDetailScreen = (props) => {
     formData.append('calorie',calories);
     formData.append('price',price);
     formData.append('time',time);
+    formData.append('user',JSON.stringify(userinfo.user));
+    console.log(userinfo)
     
 
     fetch('http://localhost:5000/recipe', {
@@ -197,7 +199,8 @@ const mapStateToProp = (state) => ({
   secondIngCategory: state.category.secondIngCategory,
   thirdIngCategory: state.category.thirdIngCategory,
   category_page: state.category.category_page,
-  category_pageRef: state.category.category_pageRef
+  category_pageRef: state.category.category_pageRef,
+  userinfo:state.auth.userinfo
 })
 
 const mapDispatchToProp = (dispatch) => ({

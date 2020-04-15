@@ -103,6 +103,7 @@ apply from: 'expo.gradle'
 apply from: "../../node_modules/react-native-unimodules/gradle.groovy"
 
 dependencies {
+    implementation project(':@react-native-seoul_kakao-login')
     implementation project(':@react-native-community_google-signin')
     implementation project(':@react-native-firebase_app')
     implementation project(':@react-native-firebase_messaging')
