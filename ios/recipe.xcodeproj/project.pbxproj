@@ -18,6 +18,8 @@
 		B5CFBF4F1EDE419400B4BE24 /* EXBuildConstants.plist in Resources */ = {isa = PBXBuildFile; fileRef = B5CFBF4E1EDE419400B4BE24 /* EXBuildConstants.plist */; };
 		B5DB04801F3A684600E91581 /* shell-app-manifest.json in Resources */ = {isa = PBXBuildFile; fileRef = B5DB047E1F3A684600E91581 /* shell-app-manifest.json */; };
 		B5DB04811F3A684600E91581 /* shell-app.bundle in Resources */ = {isa = PBXBuildFile; fileRef = B5DB047F1F3A684600E91581 /* shell-app.bundle */; };
+		CE05616C244B06C70040B1EB /* libRNFBApp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CE05616B244B06C70040B1EB /* libRNFBApp.a */; };
+		CE05616E244B06D30040B1EB /* libRNFBMessaging.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CE05616D244B06D30040B1EB /* libRNFBMessaging.a */; };
 		CE8DA2E32441A93700E23EC3 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = CE8DA2E22441A93700E23EC3 /* GoogleService-Info.plist */; };
 		EBB8117C1BFA0514F79CAF74 /* libPods-recipe.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C4A88D15726AD99E8A257BC7 /* libPods-recipe.a */; };
 /* End PBXBuildFile section */
@@ -40,6 +42,8 @@
 		B5DB047E1F3A684600E91581 /* shell-app-manifest.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "shell-app-manifest.json"; sourceTree = "<group>"; };
 		B5DB047F1F3A684600E91581 /* shell-app.bundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "shell-app.bundle"; sourceTree = "<group>"; };
 		C4A88D15726AD99E8A257BC7 /* libPods-recipe.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-recipe.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		CE05616B244B06C70040B1EB /* libRNFBApp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libRNFBApp.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		CE05616D244B06D30040B1EB /* libRNFBMessaging.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libRNFBMessaging.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		CE8DA2E22441A93700E23EC3 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "GoogleService-Info.plist"; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
@@ -48,7 +52,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CE05616E244B06D30040B1EB /* libRNFBMessaging.a in Frameworks */,
 				EBB8117C1BFA0514F79CAF74 /* libPods-recipe.a in Frameworks */,
+				CE05616C244B06C70040B1EB /* libRNFBApp.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -58,6 +64,8 @@
 		1A42804E64B7E9E0AB8B6799 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				CE05616D244B06D30040B1EB /* libRNFBMessaging.a */,
+				CE05616B244B06C70040B1EB /* libRNFBApp.a */,
 				C4A88D15726AD99E8A257BC7 /* libPods-recipe.a */,
 			);
 			name = Frameworks;

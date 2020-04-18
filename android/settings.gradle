@@ -1,4 +1,8 @@
 include ':app'
+include ':@react-native-firebase_storage'
+project(':@react-native-firebase_storage').projectDir = new File(rootProject.projectDir, '../node_modules/@react-native-firebase/storage/android')
+include ':react-native-firebase'
+project(':react-native-firebase').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-firebase/android')
 include ':@react-native-seoul_kakao-login'
 project(':@react-native-seoul_kakao-login').projectDir = new File(rootProject.projectDir, '../node_modules/@react-native-seoul/kakao-login/android')
 include ':@react-native-community_google-signin'

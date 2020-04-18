@@ -14,13 +14,14 @@ const REM = Dimensions.get('window').width / 375
 const NewFeedItem = (props) => {
   const { navigation,name, icon, darkModeColor, darkModeTextColor, onPress, data } = props;
   const [like, setLike] = useState(false); 
+  console.log(data.user)
   return (
       <NeumorphWrapper shadowColor={darkModeColor}>
         <TouchableWithoutFeedback onPress={()=>navigation.navigate('recipe_detail',{data:data})}>
         <View style={{ ...styles.container, backgroundColor: darkModeColor }}>
           <View style={styles.header}>
             <RevertNeumorphWrapper shadowColor={darkModeColor}>
-              <FastImage style={{ ...styles.profileImage, backgroundColor: darkModeColor }} source={{ uri: data.user.photo }} />
+              <FastImage style={{ ...styles.profileImage, backgroundColor: darkModeColor }} source={{ uri: data.user.photo?data.user.photo.photo:data.user.profileUrl }} />
             </RevertNeumorphWrapper>
             <View style={styles.nameContainer}>
               <Text style={styles.nameText}>{data.name}</Text>

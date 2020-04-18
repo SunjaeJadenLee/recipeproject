@@ -37,6 +37,12 @@ target 'recipe' do
 
   pod 'kakao-login', :path => '../node_modules/@react-native-seoul/kakao-login'
 
+  pod 'RNFirebase', :path => '../node_modules/react-native-firebase/ios'
+  pod 'Firebase/Core'
+  pod 'Firebase/Messaging'  
+
+  pod 'RNFBStorage', :path => '../node_modules/@react-native-firebase/storage'
+
   post_install do |installer|
     installer.pods_project.main_group.tab_width = '2';
     installer.pods_project.main_group.indent_width = '2';

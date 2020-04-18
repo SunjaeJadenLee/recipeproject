@@ -1,5 +1,5 @@
 import React,{useRef,useEffect} from 'react';
-import { Image, Platform, Animated, TouchableOpacity, View, SafeAreaView,ScrollView,Dimensions, FlatList } from 'react-native';
+import { Image, Platform, Animated, TouchableOpacity, View, SafeAreaView,ScrollView,Dimensions, FlatList, TouchableWithoutFeedback } from 'react-native';
 import StyleSheet from 'react-native-extended-stylesheet'
 
 import FastImage from 'react-native-fast-image'
@@ -25,16 +25,20 @@ const RecipeBox = (props) => {
   // item&&console.log(item.image_urls[0])
 
   return (
-    <RevertNeumorphWrapper shadowColor={darkModeColor}>
-      <View style={{ ...styles.container, backgroundColor: darkModeColor }}>
-        {typeof item == 'string' && <NeumorphWrapper shadowColor={darkModeColor}>
-          <TouchableOpacity onPress={()=>navigation.navigate('recipe')}>
-            <SquareButton color={darkModeColor} name={'plus'} textColor={darkModeTextColor} />
-          </TouchableOpacity>
-        </NeumorphWrapper>}
-        {(item&&item.image_urls)&&<FastImage style={styles.image} source={{uri:item.image_urls[0],scale:0.00000001}}/>}
-      </View>
-    </RevertNeumorphWrapper>
+    
+    <RevertNeumorphWrapper shadowColor={darkModeColor}> 
+        <View style={{ ...styles.container, backgroundColor: darkModeColor, zIndex: -1 }}>
+          {typeof item == 'string' && <NeumorphWrapper shadowColor={darkModeColor}>
+            <TouchableOpacity onPress={() => navigation.navigate('recipe')}>
+              <SquareButton color={darkModeColor} name={'plus'} textColor={darkModeTextColor} />
+            </TouchableOpacity>
+          </NeumorphWrapper>}
+          {(item && item.image_urls) && 
+            <FastImage style={styles.image} source={{ uri: item.image_urls[0], scale: 0.00000001 }} />
+          }
+        </View> 
+    </RevertNeumorphWrapper> 
+    
   );
 }
 
@@ -58,7 +62,8 @@ const styles = StyleSheet.create({
   image:{
     width:'100rem',
     height:'100rem',
-    borderRadius:'15rem'
+    borderRadius:'15rem',
+    zIndex:999
   }
 });
 

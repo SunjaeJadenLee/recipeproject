@@ -7,11 +7,11 @@ import {connect} from 'react-redux'
 import ToggleButton from './buttons/ToggleButton'
 
 const SettingListItem = (props) => {
-  const {name,icon,darkModeColor,darkModeTextColor,onPress,setIsEdit,isEdit} = props;
+  const {name,icon,darkModeColor,darkModeTextColor,onPress,setIsEdit,isEdit,editUserProfile} = props;
     return (
         <View style={styles.container}> 
                 <Text style={{...styles.itemText,color:darkModeTextColor}}>{name}</Text> 
-                <ToggleButton name={icon} onPress={onPress} setIsEdit={setIsEdit} isEdit={isEdit}/> 
+                <ToggleButton name={icon} onPress={onPress} setIsEdit={setIsEdit} isEdit={isEdit} editUserProfile={editUserProfile}/> 
         </View>
     );
   }

@@ -5,16 +5,17 @@ import { getCameraPermissionsAsync, getCameraRollPermissionsAsync, launchImageLi
 import RevertNeumorphWrapper from '../../components/RevertNeumorphWrapper'
 import NeumorphWrapper from '../../components/NeumorphWrapper'
 import ScreenHeader from '../../components/ScreenHeader'
+import firebase from 'react-native-firebase'
 
 import { connect } from 'react-redux'
 import { setDarkMode } from '../../redux/actions'
 import { setCategoryPage, setCategoryPageRef } from '../../redux/categoryActions'
-import {postRecipe} from '../../redux/recipeActions'
+import { postRecipe } from '../../redux/recipeActions'
 
 import CategoryOption from '../../components/category/CategoryOption';
 import CategoryDetailItem from '../../components/category/CategoryDetailItem'
 
-import {CommonActions} from '@react-navigation/native'
+import { CommonActions } from '@react-navigation/native'
 
 const REM = Dimensions.get('window').width / 375
 
@@ -22,18 +23,18 @@ const CategoryDetailScreen = (props) => {
   const { navigation, route, darkModeColor, darkModeTextColor, darkMode, setDarkMode,
     category_type, selected_category, category_ingredient,
     category_page, setCategoryPage, setCategoryPageRef, category_pageRef,
-    secondIngCategory, thirdIngCategory,userinfo
+    secondIngCategory, thirdIngCategory, userinfo
   } = props;
 
   const [ing, setIng] = useState([]);
   const [grams, setGrams] = useState([]);
   const [calories, setCalories] = useState(0);
   const [price, setPrice] = useState(0);
-  const [time, setTime] = useState(0); 
+  const [time, setTime] = useState(0);
 
   useEffect(() => {
     console.log('detail@@@@@@@@@@@@@@@@@@@@@')
-    route.params&& console.log(route.params.data)
+    route.params && console.log(route.params.data)
     route.params && setIng(route.params.data.tags.ing)
   }, [route.params])
 
@@ -50,14 +51,13 @@ const CategoryDetailScreen = (props) => {
   const setOpen = (open, setopen, openanime, height) => {
     Animated.timing(openanime, {
       toValue: open ? 0 : height * REM,
-      duration: 300, 
+      duration: 300,
     }).start()
     setopen(!open);
 
-  } 
+  }
 
   useEffect(() => {
-    console.log(grams)
   }, [grams])
 
   const renderItem = ({ item, index }) => {
@@ -65,48 +65,95 @@ const CategoryDetailScreen = (props) => {
       <CategoryDetailItem name={item} setGrams={setGrams} index={index} grams={grams} />
     )
   }
-  
-  const postRecipe = () => { 
+
+  const postRecipe = async () => {
     let { data } = route.params;
-    let imageArray = data.images.map(e=>{return{uri: e.uri,name: e.uri,filename :e.uri.split('/')[e.uri.split('/').length-1],type: 'image/png'}})
-    console.log(imageArray)
+    let imageArray = data.images.map(e => { return { uri: e.uri, name: e.uri, filename: e.uri.split('/')[e.uri.split('/').length - 1], type: 'image/png' } })
     let headers = new Headers();
     let formData = new FormData();
-    headers.append('Content-Type', 'multipart/form-data');
-    headers.append('Accept', 'application/json')
-    formData.append('name', data.name);
-    formData.append('type', JSON.stringify(data.tags.type));
-    formData.append('ingredients',JSON.stringify(grams)); 
-    data.images.map(e=>formData.append('images',{uri: e.uri,name: e.uri,filename :e.uri.split('/')[e.uri.split('/').length-1],type: 'image/png'}))
-    formData.append('descriptions', JSON.stringify(data.descriptions));
-    formData.append('calorie',calories);
-    formData.append('price',price);
-    formData.append('time',time);
-    formData.append('user',JSON.stringify(userinfo.user));
-    console.log(userinfo)
-    
+    // data.images.map(image =>firebase.storage().ref('recipeImages/' + userinfo.id).child(image.uri.split('/')[image.uri.split('/').length - 1]).putFile(image.uri))
+    new Promise.all(data.images.map(image => new Promise((res, rej) => {
+      firebase.storage().ref('recipeImages/' + userinfo.id).child(image.uri.split('/')[image.uri.split('/').length - 1]).putFile(image.uri).then(result => {
+        formData.append('images', result.downloadURL)
+        res(result)
+      })
+    }))).then(f => {
+      headers.append('Content-Type', 'multipart/form-data');
+      headers.append('Accept', 'application/json')
+      formData.append('name', data.name);
+      formData.append('userid', userinfo.id);
+      formData.append('type', JSON.stringify(data.tags.type));
+      formData.append('ingredients', JSON.stringify(grams));
+      // data.images.map(e => formData.append('images', { uri: e.uri, name: e.uri, filename: e.uri.split('/')[e.uri.split('/').length - 1], type: 'image/png' }))
+      formData.append('descriptions', JSON.stringify(data.descriptions));
+      formData.append('calorie', calories);
+      formData.append('price', price);
+      formData.append('time', time);
+      formData.append('user', JSON.stringify(userinfo.user ? userinfo.user : userinfo)); 
+      fetch('http://localhost:5000/recipe', {
+        method: 'POST',
+        headers: headers,
+        body: formData
+      }).then(res => {
+        console.log(res)
+        if (res.status == 200) {
+          res.json().then(resJson => {
+            console.log(resJson)
+            navigation.dispatch(
+              CommonActions.reset({
+                index: 1,
+                routes: [{ name: 'profile' }]
+              })
+            )
+          })
+        } else {
+          return false
+        }
 
-    fetch('http://localhost:5000/recipe', {
-      method:'POST',
-      headers: headers,
-      body: formData
-    }).then(res => {
-      console.log(res)
-      if(res.status == 200){
-        res.json().then(resJson => {
-          console.log(resJson)
-          navigation.dispatch(
-            CommonActions.reset({
-              index:1,
-              routes:[{name:'profile'}]
-            })
-          )
-        })
-      } else{
-        return false
-      }
-      
-  })
+      }).catch(err=>console.log(err))
+    })
+
+    // new Promise.all(data.images.map(e =>
+    //   new Promise((res, rej) => firebase.storage().ref('recipeImages/' + userinfo.id).child(e.uri.split('/')[e.uri.split('/').length - 1]).putFile(e.uri)
+    //     .then(f => formData.append('images', f.downloadURL))))).then(e => {
+    //       console.log(e)
+    //       headers.append('Content-Type', 'multipart/form-data');
+    //       headers.append('Accept', 'application/json')
+    //       formData.append('name', data.name);
+    //       formData.append('userid', userinfo.id);
+    //       formData.append('type', JSON.stringify(data.tags.type));
+    //       formData.append('ingredients', JSON.stringify(grams));
+    //       // data.images.map(e => formData.append('images', { uri: e.uri, name: e.uri, filename: e.uri.split('/')[e.uri.split('/').length - 1], type: 'image/png' }))
+    //       formData.append('descriptions', JSON.stringify(data.descriptions));
+    //       formData.append('calorie', calories);
+    //       formData.append('price', price);
+    //       formData.append('time', time);
+    //       formData.append('user', JSON.stringify(userinfo.user ? userinfo.user : userinfo));
+    //       console.log(userinfo)
+
+    //       fetch('http://localhost:5000/recipe', {
+    //         method: 'POST',
+    //         headers: headers,
+    //         body: formData
+    //       }).then(res => {
+    //         console.log(res)
+    //         if (res.status == 200) {
+    //           res.json().then(resJson => {
+    //             console.log(resJson)
+    //             navigation.dispatch(
+    //               CommonActions.reset({
+    //                 index: 1,
+    //                 routes: [{ name: 'profile' }]
+    //               })
+    //             )
+    //           })
+    //         } else {
+    //           return false
+    //         }
+
+    //       })
+    //     })
+
   }
 
   return (
@@ -114,48 +161,48 @@ const CategoryDetailScreen = (props) => {
       <SafeAreaView />
       <ScreenHeader title={'DETAIL'} navigation={navigation} postRecipe={postRecipe} />
       {/* <KeyboardAvoidingView enabled behavior={'padding'}> */}
-        <ScrollView keyboardShouldPersistTaps={'always'} >
-          <View style={styles.optionContainer}>
-            <CategoryOption text={'재료정량'} open={ingAmtOpen} setOpen={() => setOpen(ingAmtOpen, setIngAmtOpen, ingAmtAnime, 200)} />
-            <RevertNeumorphWrapper shadowColor={darkModeColor}>
-              <Animated.View style={{ ...styles.animatedContainer, backgroundColor: darkModeColor, height: ingAmtAnime }}>
-                {/* {ing.map(e => <Text>{e}</Text>)} */}
-                <FlatList
-                  data={ing}
-                  renderItem={renderItem}
-                />
-              </Animated.View>
-            </RevertNeumorphWrapper>
-            <CategoryOption text={'칼로리'} open={calOpen} setOpen={() => setOpen(calOpen, setCalOpen, calAnime, 70)} />
-            <RevertNeumorphWrapper shadowColor={darkModeColor}>
-              <Animated.View style={{ ...styles.animatedContainer, backgroundColor: darkModeColor, height: calAnime }}>
-                {/* <RevertNeumorphWrapper shadowColor={darkModeColor}> */}
-                <TextInput textContentType="telephoneNumber" onChangeText={(e) => setCalories(e)} style={{ ...styles.gramInput , display: calOpen ? 'flex' : 'none' }} />
-                {/* </RevertNeumorphWrapper> */}
-                <Text style={{ ...styles.detailText, display: calOpen ? 'flex' : 'none' }}> Kcal</Text>
-              </Animated.View>
-            </RevertNeumorphWrapper>
-            <CategoryOption text={'예상가격'} open={priceOpen} setOpen={() => setOpen(priceOpen, setPriceOpen, priceAnime, 70)} />
-            <RevertNeumorphWrapper shadowColor={darkModeColor}>
-              <Animated.View style={{ ...styles.animatedContainer, backgroundColor: darkModeColor, height: priceAnime }}>
-                {/* <RevertNeumorphWrapper shadowColor={darkModeColor}> */}
-                <TextInput textContentType="telephoneNumber" onChangeText={(e) => setPrice(e)} style={{ ...styles.gramInput, display: priceOpen ? 'flex' : 'none' }} />
-                {/* </RevertNeumorphWrapper> */}
-                <Text style={{ ...styles.detailText, display: priceOpen ? 'flex' : 'none' }}> ₩</Text>
-              </Animated.View>
-            </RevertNeumorphWrapper>
-            <CategoryOption text={'조리시간'} open={timeOpen} setOpen={() => setOpen(timeOpen, setTimeOpen, timeAnime, 70)} />
-            <RevertNeumorphWrapper shadowColor={darkModeColor}>
-              <Animated.View style={{ ...styles.animatedContainer, backgroundColor: darkModeColor, height: timeAnime }}>
-                {/* <RevertNeumorphWrapper shadowColor={darkModeColor}> */}
-                <TextInput textContentType="telephoneNumber" onChangeText={(e) => setTime(e)} style={{ ...styles.gramInput , display: timeOpen ? 'flex' : 'none' }} />
-                {/* </RevertNeumorphWrapper> */}
-                <Text style={{ ...styles.detailText, display: timeOpen ? 'flex' : 'none' }}> (분)</Text>
-              </Animated.View>
-            </RevertNeumorphWrapper>
-          </View>
-        </ScrollView>
-        {/* </KeyboardAvoidingView> */}
+      <ScrollView keyboardShouldPersistTaps={'always'} >
+        <View style={styles.optionContainer}>
+          <CategoryOption text={'재료정량'} open={ingAmtOpen} setOpen={() => setOpen(ingAmtOpen, setIngAmtOpen, ingAmtAnime, 200)} />
+          <RevertNeumorphWrapper shadowColor={darkModeColor}>
+            <Animated.View style={{ ...styles.animatedContainer, backgroundColor: darkModeColor, height: ingAmtAnime }}>
+              {/* {ing.map(e => <Text>{e}</Text>)} */}
+              <FlatList
+                data={ing}
+                renderItem={renderItem}
+              />
+            </Animated.View>
+          </RevertNeumorphWrapper>
+          <CategoryOption text={'칼로리'} open={calOpen} setOpen={() => setOpen(calOpen, setCalOpen, calAnime, 70)} />
+          <RevertNeumorphWrapper shadowColor={darkModeColor}>
+            <Animated.View style={{ ...styles.animatedContainer, backgroundColor: darkModeColor, height: calAnime }}>
+              {/* <RevertNeumorphWrapper shadowColor={darkModeColor}> */}
+              <TextInput textContentType="telephoneNumber" onChangeText={(e) => setCalories(e)} style={{ ...styles.gramInput, display: calOpen ? 'flex' : 'none' }} />
+              {/* </RevertNeumorphWrapper> */}
+              <Text style={{ ...styles.detailText, display: calOpen ? 'flex' : 'none' }}> Kcal</Text>
+            </Animated.View>
+          </RevertNeumorphWrapper>
+          <CategoryOption text={'예상가격'} open={priceOpen} setOpen={() => setOpen(priceOpen, setPriceOpen, priceAnime, 70)} />
+          <RevertNeumorphWrapper shadowColor={darkModeColor}>
+            <Animated.View style={{ ...styles.animatedContainer, backgroundColor: darkModeColor, height: priceAnime }}>
+              {/* <RevertNeumorphWrapper shadowColor={darkModeColor}> */}
+              <TextInput textContentType="telephoneNumber" onChangeText={(e) => setPrice(e)} style={{ ...styles.gramInput, display: priceOpen ? 'flex' : 'none' }} />
+              {/* </RevertNeumorphWrapper> */}
+              <Text style={{ ...styles.detailText, display: priceOpen ? 'flex' : 'none' }}> ₩</Text>
+            </Animated.View>
+          </RevertNeumorphWrapper>
+          <CategoryOption text={'조리시간'} open={timeOpen} setOpen={() => setOpen(timeOpen, setTimeOpen, timeAnime, 70)} />
+          <RevertNeumorphWrapper shadowColor={darkModeColor}>
+            <Animated.View style={{ ...styles.animatedContainer, backgroundColor: darkModeColor, height: timeAnime }}>
+              {/* <RevertNeumorphWrapper shadowColor={darkModeColor}> */}
+              <TextInput textContentType="telephoneNumber" onChangeText={(e) => setTime(e)} style={{ ...styles.gramInput, display: timeOpen ? 'flex' : 'none' }} />
+              {/* </RevertNeumorphWrapper> */}
+              <Text style={{ ...styles.detailText, display: timeOpen ? 'flex' : 'none' }}> (분)</Text>
+            </Animated.View>
+          </RevertNeumorphWrapper>
+        </View>
+      </ScrollView>
+      {/* </KeyboardAvoidingView> */}
     </View>
   );
 }
@@ -200,13 +247,13 @@ const mapStateToProp = (state) => ({
   thirdIngCategory: state.category.thirdIngCategory,
   category_page: state.category.category_page,
   category_pageRef: state.category.category_pageRef,
-  userinfo:state.auth.userinfo
+  userinfo: state.auth.userinfo
 })
 
 const mapDispatchToProp = (dispatch) => ({
   setDarkMode: (darkMode) => dispatch(setDarkMode(darkMode)),
   setCategoryPage: (page) => dispatch(setCategoryPage(page)),
-  setCategoryPageRef: (ref) => dispatch(setCategoryPageRef(ref)), 
+  setCategoryPageRef: (ref) => dispatch(setCategoryPageRef(ref)),
 })
 
 

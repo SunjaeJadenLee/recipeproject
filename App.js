@@ -70,6 +70,7 @@ export default function App(props) {
         <RecipeStack.Screen name="recipe" component={AddRecipeScreen}/> 
         <RecipeStack.Screen name='select' component={CategorySelectScreen}/>
         <RecipeStack.Screen name='category_detail' component={CategoryDetailScreen}/>
+        <RecipeStack.Screen name='recipe_detail' component={RecipeDetailScreen} />
       </RecipeStack.Navigator>
     )
   }

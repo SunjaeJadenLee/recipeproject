@@ -6,7 +6,7 @@ const initialState = {
 
 const reducer = (state=initialState,actions) =>{
     switch(actions.type){
-        case 'SETUSERINFO':
+        case 'SETUSERINFO': 
             return {...state,userinfo:actions.userinfo}
 
         default:

@@ -11,7 +11,7 @@ import { setDarkMode } from '../../redux/actions';
 
 const ToggleButton = (props) => {
   const [onOff,setOnOff] = useState(false);
-  const {name,darkMode,darkModeColor,darkModeTextColor,onPress,setDarkMode,setIsEdit,isEdit} = props;
+  const {name,darkMode,darkModeColor,darkModeTextColor,onPress,setDarkMode,setIsEdit,isEdit,editUserProfile,userinfo} = props;
 
   useEffect(() => { 
     // setOnOff(props.darkMode); 
@@ -80,7 +80,12 @@ const ToggleButton = (props) => {
 
       case 'profile':
         setOnOff(!onOff);
-        setIsEdit(!isEdit);
+        // setIsEdit(!isEdit);
+        if(!isEdit == true){ 
+          setIsEdit(!isEdit);
+        } else { 
+          editUserProfile(userinfo.user ? userinfo.user.name : userinfo.nickname,userinfo.user ? userinfo.user.photo : userinfo.profileUrl);
+        } 
         break;
     }
   } 
@@ -127,7 +132,8 @@ const ToggleButton = (props) => {
   const mapStateToProp = (state) =>({
     darkModeColor: state.darkMode.darkModeColor,
     darkModeTextColor:state.darkMode.darkModeTextColor,
-    darkMode:state.darkMode.darkMode
+    darkMode:state.darkMode.darkMode,
+    userinfo:state.auth.userinfo
   })
   
   const mapDispatchToProp = (dispatch) =>({
