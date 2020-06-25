@@ -16,6 +16,7 @@ import AddRecipeScreen from './screens/recipe/AddRecipeScreen'
 import CategorySelectScreen from './screens/recipe/CategorySelectScreen'
 import CategoryDetailScreen from './screens/recipe/CategoryDetailScreen'
 import RecipeDetailScreen from './screens/recipe/RecipeDetailScreen'
+import Dialogue from './components/Dialogue';
 
 import {Provider} from 'react-redux'
 import store from './redux/store'
@@ -51,7 +52,7 @@ export default function App(props) {
     loadResourcesAndDataAsync();
   }, []);
 
-  const HomeStackScreen = props =>{
+  const HomeStackScreen = props =>{ 
     return (
       <HomeStack.Navigator screenOptions={{headerShown:false}}>
         <HomeStack.Screen name="home" component={HomeScreen} />
@@ -73,15 +74,16 @@ export default function App(props) {
         <RecipeStack.Screen name='recipe_detail' component={RecipeDetailScreen} />
       </RecipeStack.Navigator>
     )
-  }
+  } 
 
+  
   if (!isLoadingComplete && !props.skipLoadingScreen) {
     return null;
   } else {
     return (
       <View style={styles.container}>
         {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-        <Provider store={store}>
+        <Provider store={store}> 
           <NavigationContainer ref={containerRef} initialState={initialNavigationState}>
             <rootStack.Navigator screenOptions={{ headerShown: false }}>
               <rootStack.Screen name="login" component={LoginScreen} />

@@ -2,6 +2,7 @@ import React,{useRef,useEffect, useState} from 'react';
 import { Image, Platform, Animated, TouchableOpacity, View, SafeAreaView,ScrollView,Dimensions, FlatList,Imgae,Text, TextInput } from 'react-native';
 import StyleSheet from 'react-native-extended-stylesheet'
 import {getCameraPermissionsAsync,getCameraRollPermissionsAsync,launchImageLibraryAsync} from 'expo-image-picker'
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
 
 import RevertNeumorphWrapper from '../../components/RevertNeumorphWrapper'
 import NeumorphWrapper from '../../components/NeumorphWrapper' 
@@ -59,7 +60,7 @@ const RecipeAddScreen = (props) => {
               let desc = descs;
               desc[index] = e
               setDescs(desc);
-            }} style={{ ...styles.descInput, backgroundColor: darkModeColor }} numberOfLines={6} />
+            }} style={{ ...styles.descInput, backgroundColor: darkModeColor }} multiline={true} numberOfLines={6} />
           </View>
         </RevertNeumorphWrapper>
       </View> 
@@ -90,7 +91,7 @@ const RecipeAddScreen = (props) => {
         images:imageUrls,
         descriptions:descs
       }} />
-      <ScrollView>
+      <KeyboardAwareScrollView>
         <FlatList
           onMomentumScrollEnd={(e)=>{
             console.log(e.nativeEvent.contentOffset.x/414)
@@ -135,7 +136,7 @@ const RecipeAddScreen = (props) => {
           horizontal 
           />:<Text style={{marginTop:20*REM,color:darkModeTextColor}}>이미지를 먼저 추가하세요.</Text>}
       </View>
-      </ScrollView> 
+      </KeyboardAwareScrollView> 
     </View>
   );
 }

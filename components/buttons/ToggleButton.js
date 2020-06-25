@@ -36,26 +36,7 @@ const ToggleButton = (props) => {
           break;
       case undefined:
           setOnOff(false)
-      //   AsyncStorage.getItem('question').then(result => { 
-      //     console.log('question: ' + result)
-      //     if (result == null || result == 'true') {
-      //       AsyncStorage.setItem('question', 'true')
-      //       setOnOff(true)
-      //     } else {
-      //       setOnOff(false)
-      //     }
-      //   })
-      // case 'darkMode':
-      //   AsyncStorage.getItem('darkMode').then(result => {
-      //     console.log('darkMode: ' + result)
-      //     if (result == null || result == 'true') {
-      //       AsyncStorage.setItem('darkMode', 'true')
-      //       setOnOff(true)
-      //     } else {
-      //       setOnOff(false)
-      //     }
-      //   })
-      //   break;
+    
 
       default:
         break;

@@ -22,8 +22,7 @@ const { darkMode, darkModeColor, darkModeTextColor, data,isType, ingredient,sele
 }
 
 const styles = StyleSheet.create({
-  container: {
-    // backgroundColor: '#EAEAEA',
+  container: { 
     width: '375rem',
     paddingHorizontal: 30,
     flexDirection: 'row',

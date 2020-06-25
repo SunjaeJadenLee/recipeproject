@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { Image, Platform, Animated, TouchableOpacity, View, SafeAreaView, ScrollView, Dimensions, FlatList } from 'react-native';
 import StyleSheet from 'react-native-extended-stylesheet'
-
+import ScrollableTabView from 'react-native-scrollable-tab-view'
 import RevertNeumorphWrapper from '../../components/RevertNeumorphWrapper'
 import NeumorphWrapper from '../../components/NeumorphWrapper'
 import ScreenHeader from '../../components/ScreenHeader'
@@ -12,17 +12,20 @@ import { setCategoryPage, setCategoryPageRef } from '../../redux/categoryActions
 import { getMyRecipe } from '../../redux/recipeActions'
 
 import RecipeBox from '../../components/RecipeBox'
+import Dialogue from '../../components/Dialogue';
+import {setDialogue} from '../../redux/dialogueActions'
 
 const REM = Dimensions.get('window').width / 375
 const data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
 
 const ProfileScreen = (props) => {
   const [recipes, setRecipes] = useState([]);
-  const { navigation, darkModeColor, darkModeTextColor, darkMode, setDarkMode,
+  const { navigation, route, darkModeColor, darkModeTextColor, darkMode, setDarkMode,
     category_type, selected_category, category_ingredient,
     category_page, setCategoryPage, setCategoryPageRef, category_pageRef,
-    secondIngCategory, thirdIngCategory, getMyRecipe, userinfo
-  } = props;
+    secondIngCategory, thirdIngCategory, getMyRecipe, userinfo,
+    setDialogue,dialogueType,dialogueMove
+  } = props; 
 
   useEffect(() => {
     let headers = new Headers();
@@ -48,8 +51,15 @@ const ProfileScreen = (props) => {
     })
   }, [])
 
+  useEffect(()=>{ 
+    if(route.params&&route.params.complete==true){
+      setDialogue('in','complete'); 
+    }
+  },[route.params])
+
   return (
     <View style={{ ...styles.container, backgroundColor: darkModeColor }}>
+      <Dialogue dialogueType={dialogueType} dialogueMove={dialogueMove} />
       <SafeAreaView />
       <ScreenHeader title={'PROFILE'} navigation={navigation} />
       <ScrollView>
@@ -99,14 +109,16 @@ const mapStateToProp = (state) => ({
   thirdIngCategory: state.category.thirdIngCategory,
   category_page: state.category.category_page,
   category_pageRef: state.category.category_pageRef,
-  userinfo: state.auth.userinfo
+  userinfo: state.auth.userinfo,
+  dialogueMove: state.dialogue.dialogueMove
 })
 
 const mapDispatchToProp = (dispatch) => ({
   setDarkMode: (darkMode) => dispatch(setDarkMode(darkMode)),
   setCategoryPage: (page) => dispatch(setCategoryPage(page)),
   setCategoryPageRef: (ref) => dispatch(setCategoryPageRef(ref)),
-  getMyRecipe: (userid) => dispatch(getMyRecipe(userid))
+  getMyRecipe: (userid) => dispatch(getMyRecipe(userid)),
+  setDialogue: (move,type) => dispatch(setDialogue(move,type))
 })
 
 

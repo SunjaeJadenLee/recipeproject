@@ -13,8 +13,7 @@ const REM = Dimensions.get('window').width / 375
 
 const NewFeedItem = (props) => {
   const { navigation,name, icon, darkModeColor, darkModeTextColor, onPress, data } = props;
-  const [like, setLike] = useState(false); 
-  console.log(data.user)
+  const [like, setLike] = useState(false);  
   return (
       <NeumorphWrapper shadowColor={darkModeColor}>
         <TouchableWithoutFeedback onPress={()=>navigation.navigate('recipe_detail',{data:data})}>

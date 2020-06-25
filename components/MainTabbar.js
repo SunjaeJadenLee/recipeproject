@@ -1,5 +1,5 @@
-import React,{useRef,useEffect} from 'react';
-import { Image, Platform, Animated, TouchableOpacity, View, SafeAreaView,ScrollView,Dimensions, FlatList, TouchableWithoutFeedback } from 'react-native';
+import React,{useRef,useEffect, useState} from 'react';
+import { Text, Platform, Animated, View, SafeAreaView,ScrollView,Dimensions, FlatList, TouchableWithoutFeedback } from 'react-native';
 import StyleSheet from 'react-native-extended-stylesheet'
 
 import FastImage from 'react-native-fast-image'
@@ -14,55 +14,62 @@ import { FontAwesome } from '@expo/vector-icons';
 import SquareButton from './buttons/SquareButton';
 
 const REM = Dimensions.get('window').width / 375
-
-const RecipeBox = (props) => {
+const tabs = ['피드','추천', '공지사항']
+const animatedLeft = [20*REM,100*REM,180*REM]
+const MainTabbar = (props) => {
+    const [selectedBar,setSelectedBar] = useState(new Animated.Value(20*REM));
   const { navigation,darkModeColor,darkModeTextColor,darkMode,setDarkMode,
     category_type,selected_category,category_ingredient,
     category_page,setCategoryPage,setCategoryPageRef,category_pageRef, 
     secondIngCategory,thirdIngCategory,
-    index,length,item,isFooter
+    index,length,item,isFooter,
+    scrollViewRef,selectedTab
   } = props;
-  // item&&console.log(item.image_urls[0])  
-  return (
-    
-    <RevertNeumorphWrapper shadowColor={darkModeColor}> 
-        <View style={{ ...styles.container, backgroundColor: darkModeColor, zIndex: -1 }}>
-          {typeof item == 'string' && <NeumorphWrapper shadowColor={darkModeColor}>
-            <TouchableOpacity onPress={() => navigation.navigate('recipe')}>
-              <SquareButton color={darkModeColor} name={'plus'} textColor={darkModeTextColor} />
-            </TouchableOpacity>
-          </NeumorphWrapper>}
-          {(item && item.image_urls) && 
-            <FastImage style={styles.image} source={{ uri: item.image_urls[0], scale: 0.00000001 }} />
-          }
-        </View> 
-    </RevertNeumorphWrapper> 
-    
-  );
+
+  useEffect(()=>{ 
+    Animated.timing(selectedBar,{
+        toValue:animatedLeft[selectedTab],
+        duration:300, 
+    }).start();
+  },[selectedTab])  
+    return (
+        <View style={styles.container}>
+            {tabs.map((e, i) => <TouchableWithoutFeedback onPress={()=>{
+                scrollViewRef.current.goToPage(i); 
+                }}>
+                <View style={styles.tab}>
+                    <Text style={{ ...styles.tabText, color: darkModeTextColor }}>{e}</Text>
+                </View>
+            </TouchableWithoutFeedback>
+            )}
+            <Animated.View style={{ ...styles.selected, backgroundColor: darkModeTextColor, left: selectedBar }} />
+        </View>
+    );
 }
 
 const styles = StyleSheet.create({
-  container: { 
-    width:'100rem',
-    height:'100rem',
-    marginTop:'15rem',
-    marginLeft:'12.5rem',
-    borderRadius:'15rem',
+  container: {  
+      width:'100%',
+      flexDirection:'row',
+      marginTop:'10rem'
+  }, 
+  tab: {
+    width:'80rem',
+    height:'40rem',
     justifyContent:'center',
     alignItems:'center'
-  }, 
-  plusIcon:{
-    justifyContent:'center',
-    alignItems:'center',
-    width:'40rem',
-    height:'40rem',
-    borderRadius:'15rem'
   },
-  image:{
-    width:'100rem',
-    height:'100rem',
-    borderRadius:'15rem',
-    zIndex:999
+  tabText:{
+    fontSize:'14rem',
+    fontWeight:'900',
+    lineHeight:'40rem',
+    textAlignVertical:'center', 
+  },
+  selected:{
+      width:'40rem',
+      height:'2rem', 
+      position:'absolute',
+      top:'40rem'
   }
 });
 
@@ -87,4 +94,4 @@ const mapDispatchToProp = (dispatch) =>({
 })
 
 
-export default connect(mapStateToProp,mapDispatchToProp)(RecipeBox)
+export default connect(mapStateToProp,mapDispatchToProp)(MainTabbar)

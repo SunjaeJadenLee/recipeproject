@@ -4,9 +4,10 @@ import thunk from 'redux-thunk'
 import categoryReducer from './categoryReducer'
 import recipeReducer from './recipeReducer'
 import authReducer from './authReducer'
+import dialogueReducer from './dialogueReducer'
 import {setInitialCategory,setIngredientCategoryDatail} from './categoryActions'
 
-const store = createStore(combineReducers({darkMode:reducer,category:categoryReducer,recipe:recipeReducer,auth:authReducer}),applyMiddleware(thunk)) 
+const store = createStore(combineReducers({darkMode:reducer,category:categoryReducer,recipe:recipeReducer,auth:authReducer,dialogue:dialogueReducer}),applyMiddleware(thunk)) 
 
 
 const setInitCategory = () => {

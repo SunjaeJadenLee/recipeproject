@@ -66,14 +66,14 @@ const RecipeDetailScreen = (props) => {
       // useNativeDriver:true
     }).start();
   }
-
+  console.log(data)
   return (
     <View style={{ ...styles.container, backgroundColor: darkModeColor }}>
       <SafeAreaView />
       <ScreenHeader title={'FEED'} navigation={navigation} />
       <View style={styles.feedContentContainer}>
         <View style={styles.feedHeaderContainer}>
-          <FastImage style={styles.feedHeaderProfileImage} source={{ uri: data.user.photo }} />
+          <FastImage style={styles.feedHeaderProfileImage} source={{ uri: data.user.profileUrl }} />
           <View style={styles.feedHeaderTitle}><Text style={styles.feedHeaderTitleText}>{data.name}</Text></View>
         </View>
         <FlatList

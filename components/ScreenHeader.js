@@ -16,12 +16,18 @@ const ScreenHeader = (props) => {
     category_page,setCategoryPage,setCategoryPageRef,category_pageRef, 
     secondIngCategory,thirdIngCategory,hasCategory,resetIngredientCategory,
     data,postRecipe
-  } = props;
-  console.log(postRecipe)
+  } = props; 
   
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
+        {title == 'HOME'&&<NeumorphWrapper shadowColor={darkModeColor}>
+          <TouchableOpacity onPress={() => navigation.navigate('profile')}>
+            <View style={styles.profileButton}>
+              <SquareButton color={darkModeColor} name={'th'} textColor={darkModeTextColor} />
+            </View>
+          </TouchableOpacity>
+        </NeumorphWrapper>}
         {title !== 'HOME' && <RevertNeumorphWrapper shadowColor={darkModeColor}>
           <TouchableOpacity onPress={() => {
             if(hasCategory){

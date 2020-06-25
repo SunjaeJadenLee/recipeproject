@@ -1,5 +1,5 @@
-import React, { useRef, useEffect, useState } from 'react';
-import { Image, Platform, Animated, KeyboardAvoidingView, View, SafeAreaView, ScrollView, Dimensions, Text, Imgae, FlatList, TextInput } from 'react-native';
+import React, { createRef,useRef, useEffect, useState } from 'react';
+import { Image, Platform, Animated, KeyboardAvoidingView, View, SafeAreaView, ScrollView, Dimensions, Text, Imgae, FlatList, TextInput, Alert } from 'react-native';
 import StyleSheet from 'react-native-extended-stylesheet'
 import { getCameraPermissionsAsync, getCameraRollPermissionsAsync, launchImageLibraryAsync } from 'expo-image-picker'
 import RevertNeumorphWrapper from '../../components/RevertNeumorphWrapper'
@@ -11,11 +11,13 @@ import { connect } from 'react-redux'
 import { setDarkMode } from '../../redux/actions'
 import { setCategoryPage, setCategoryPageRef } from '../../redux/categoryActions'
 import { postRecipe } from '../../redux/recipeActions'
+import {setDialogue} from '../../redux/dialogueActions'
 
 import CategoryOption from '../../components/category/CategoryOption';
 import CategoryDetailItem from '../../components/category/CategoryDetailItem'
 
 import { CommonActions } from '@react-navigation/native'
+import Dialogue from '../../components/Dialogue';
 
 const REM = Dimensions.get('window').width / 375
 
@@ -23,7 +25,8 @@ const CategoryDetailScreen = (props) => {
   const { navigation, route, darkModeColor, darkModeTextColor, darkMode, setDarkMode,
     category_type, selected_category, category_ingredient,
     category_page, setCategoryPage, setCategoryPageRef, category_pageRef,
-    secondIngCategory, thirdIngCategory, userinfo
+    secondIngCategory, thirdIngCategory, userinfo,
+    setDialogue,dialogueType,dialogueMove
   } = props;
 
   const [ing, setIng] = useState([]);
@@ -32,9 +35,7 @@ const CategoryDetailScreen = (props) => {
   const [price, setPrice] = useState(0);
   const [time, setTime] = useState(0);
 
-  useEffect(() => {
-    console.log('detail@@@@@@@@@@@@@@@@@@@@@')
-    route.params && console.log(route.params.data)
+  useEffect(() => {  
     route.params && setIng(route.params.data.tags.ing)
   }, [route.params])
 
@@ -45,7 +46,7 @@ const CategoryDetailScreen = (props) => {
   const [priceOpen, setPriceOpen] = useState(false);
   const [priceAnime, setPriceAnime] = useState(new Animated.Value(0));
   const [timeOpen, setTimeOpen] = useState(false);
-  const [timeAnime, setTimeAnime] = useState(new Animated.Value(0));
+  const [timeAnime, setTimeAnime] = useState(new Animated.Value(0)); 
   //   const ingAmtInappro = ingAmtAnime.interpolate({inputRange:[0,1],outputRange:[0,2]})
 
   const setOpen = (open, setopen, openanime, height) => {
@@ -66,7 +67,17 @@ const CategoryDetailScreen = (props) => {
     )
   }
 
+  const submitRecipe = () =>{ 
+    Alert.alert('','레시피를 등록하시겠습니까?',[
+      {text:'확인',onPress:()=>{ 
+        postRecipe();
+      }},
+      {text:'취소'}
+    ])
+  }
+
   const postRecipe = async () => {
+    setDialogue('in','loading')
     let { data } = route.params;
     let imageArray = data.images.map(e => { return { uri: e.uri, name: e.uri, filename: e.uri.split('/')[e.uri.split('/').length - 1], type: 'image/png' } })
     let headers = new Headers();
@@ -99,12 +110,14 @@ const CategoryDetailScreen = (props) => {
         if (res.status == 200) {
           res.json().then(resJson => {
             console.log(resJson)
-            navigation.dispatch(
-              CommonActions.reset({
-                index: 1,
-                routes: [{ name: 'profile' }]
-              })
-            )
+            setDialogue('out','loading'); 
+            // navigation.dispatch(
+            //   CommonActions.reset({
+            //     index: 1,
+            //     routes: [{name:'home'},{ name: 'profile',params:{complete:'true'} }]
+            //   })
+            // )
+            navigation.replace('profile',{complete:true})
           })
         } else {
           return false
@@ -112,61 +125,19 @@ const CategoryDetailScreen = (props) => {
 
       }).catch(err=>console.log(err))
     })
-
-    // new Promise.all(data.images.map(e =>
-    //   new Promise((res, rej) => firebase.storage().ref('recipeImages/' + userinfo.id).child(e.uri.split('/')[e.uri.split('/').length - 1]).putFile(e.uri)
-    //     .then(f => formData.append('images', f.downloadURL))))).then(e => {
-    //       console.log(e)
-    //       headers.append('Content-Type', 'multipart/form-data');
-    //       headers.append('Accept', 'application/json')
-    //       formData.append('name', data.name);
-    //       formData.append('userid', userinfo.id);
-    //       formData.append('type', JSON.stringify(data.tags.type));
-    //       formData.append('ingredients', JSON.stringify(grams));
-    //       // data.images.map(e => formData.append('images', { uri: e.uri, name: e.uri, filename: e.uri.split('/')[e.uri.split('/').length - 1], type: 'image/png' }))
-    //       formData.append('descriptions', JSON.stringify(data.descriptions));
-    //       formData.append('calorie', calories);
-    //       formData.append('price', price);
-    //       formData.append('time', time);
-    //       formData.append('user', JSON.stringify(userinfo.user ? userinfo.user : userinfo));
-    //       console.log(userinfo)
-
-    //       fetch('http://localhost:5000/recipe', {
-    //         method: 'POST',
-    //         headers: headers,
-    //         body: formData
-    //       }).then(res => {
-    //         console.log(res)
-    //         if (res.status == 200) {
-    //           res.json().then(resJson => {
-    //             console.log(resJson)
-    //             navigation.dispatch(
-    //               CommonActions.reset({
-    //                 index: 1,
-    //                 routes: [{ name: 'profile' }]
-    //               })
-    //             )
-    //           })
-    //         } else {
-    //           return false
-    //         }
-
-    //       })
-    //     })
-
+    
   }
 
   return (
-    <View style={{ ...styles.container, backgroundColor: darkModeColor }}>
+    <View style={{ ...styles.container, backgroundColor: darkModeColor }}> 
+      <Dialogue dialogueType={dialogueType} dialogueMove={dialogueMove} />
       <SafeAreaView />
-      <ScreenHeader title={'DETAIL'} navigation={navigation} postRecipe={postRecipe} />
-      {/* <KeyboardAvoidingView enabled behavior={'padding'}> */}
+      <ScreenHeader title={'DETAIL'} navigation={navigation} postRecipe={submitRecipe} />
       <ScrollView keyboardShouldPersistTaps={'always'} >
         <View style={styles.optionContainer}>
           <CategoryOption text={'재료정량'} open={ingAmtOpen} setOpen={() => setOpen(ingAmtOpen, setIngAmtOpen, ingAmtAnime, 200)} />
           <RevertNeumorphWrapper shadowColor={darkModeColor}>
             <Animated.View style={{ ...styles.animatedContainer, backgroundColor: darkModeColor, height: ingAmtAnime }}>
-              {/* {ing.map(e => <Text>{e}</Text>)} */}
               <FlatList
                 data={ing}
                 renderItem={renderItem}
@@ -247,13 +218,16 @@ const mapStateToProp = (state) => ({
   thirdIngCategory: state.category.thirdIngCategory,
   category_page: state.category.category_page,
   category_pageRef: state.category.category_pageRef,
-  userinfo: state.auth.userinfo
+  userinfo: state.auth.userinfo,
+  dialogueType: state.dialogue.dialogueType,
+  dialogueMove: state.dialogue.dialogueMove
 })
 
 const mapDispatchToProp = (dispatch) => ({
   setDarkMode: (darkMode) => dispatch(setDarkMode(darkMode)),
   setCategoryPage: (page) => dispatch(setCategoryPage(page)),
   setCategoryPageRef: (ref) => dispatch(setCategoryPageRef(ref)),
+  setDialogue: (move,type) => dispatch(setDialogue(move,type))
 })
 
 
